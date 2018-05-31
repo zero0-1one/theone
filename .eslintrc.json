@@ -1,0 +1,31 @@
+{
+  "env": {
+    "commonjs": true,
+    "node": true,
+    "mocha": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 8
+  },
+  "rules": {
+    "strict": ["error", "global"],
+    "no-console": "warn",
+    "no-undef": ["warn"],
+    "semi": ["error", "never"],
+    "quotes": ["warn", "single"],
+    "no-unused-vars": "warn",
+    "no-extra-semi": "error",
+    "no-const-assign": "warn",
+    "no-this-before-super": "warn",
+    "no-unreachable": "warn",
+    "constructor-super": "warn",
+    "valid-typeof": "warn"
+  },
+  "globals": {
+    "theone": true
+  }
+}

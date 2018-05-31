@@ -1,0 +1,44 @@
+{
+  "name": "zo-theone-server",
+  "version": "0.0.0",
+  "description": "A smart and very fast application server framework",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -t 10000 --recursive  -R spec test/"
+  },
+  "keywords": [
+    "theone",
+    "theone server",
+    "theone client",
+    "app",
+    "koa",
+    "framework",
+    "web"
+  ],
+  "engines": {
+    "node": ">= 10.0.0"
+  },
+  "dependencies": {
+    "@captemulation/get-parameter-names": "^1.2.0",
+    "koa": "^2.5.1",
+    "koa-bodyparser": "^4.2.1",
+    "log4js": "^2.8.0",
+    "mysql2": "^1.5.3",
+    "zo-tail-f": "^1.0.2"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "istanbul": "^0.4.5",
+    "mocha": "^5.2.0",
+    "zo-mocha-ext": "^1.0.1"
+  },
+  "author": "zero0-1one",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zero0-1one/theone-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zero0-1one/theone-server/issues"
+  }
+}
