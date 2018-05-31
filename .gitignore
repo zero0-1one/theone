@@ -61,4 +61,4 @@ typings/
 .next
 
 test/test_log/
-vscode/
+/.vscode
