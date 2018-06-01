@@ -4,7 +4,7 @@
   "description": "A smart and very fast application server framework",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- -t 10000 --recursive  -R spec test/"
+    "test": "nyc --reporter=html --reporter=text mocha --timeout=10000 --slow=5000 test/test.js"
   },
   "keywords": [
     "theone",
@@ -24,13 +24,13 @@
     "koa-bodyparser": "^4.2.1",
     "log4js": "^2.8.0",
     "mysql2": "^1.5.3",
-    "zo-tail-f": "^1.0.2"
+    "zo-tail-f": "^1.0.3"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "istanbul": "^0.4.5",
     "mocha": "^5.2.0",
-    "zo-mocha-ext": "^1.0.1"
+    "nyc": "^12.0.1",
+    "zo-mocha-ext": "^1.0.2"
   },
   "author": "zero0-1one",
   "license": "MIT",

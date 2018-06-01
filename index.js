@@ -29,6 +29,8 @@ const defEnvironment = {
 
 let initialized = false
 let theoneApp = new App()
+
+//通常 theone 的属性都需要在 create() 之后才能正常使用
 module.exports = {
   create(environment = {}) {
     if (initialized) {
@@ -39,16 +41,13 @@ module.exports = {
       global[this.env.NAMESPACE] = this
     }
     if (this.env.GLOBAL_LOCK) {
-      require('./global_lock')()
+      require('./lib/global_lock')()
     }
-    if (this.env.DEBUG) {
-      require('./debug').start()
-    }
+    this.engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
     let cfg = config.load(this.path(this.env.CONFIG_DIR))
     util.deepFreeze(Object.assign(this.config, cfg))
-
     log.init(this.config['log'])
-
+    this.engine.start()
     initialized = true
     return theoneApp
   },
@@ -60,6 +59,8 @@ module.exports = {
     await theoneApp.close()
     await Db.close()
     await log.shutdown()
+    await this.engine.stop()
+    initialized = false
   },
 
   path(...path) {
@@ -68,10 +69,8 @@ module.exports = {
 
   Db,
   util,
+  log,
 
-  //以下属性需要调用 create() 之后才能正常使用
   config: {},
   env: {},
-
-  log,
 }

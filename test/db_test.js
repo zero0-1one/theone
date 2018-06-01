@@ -32,8 +32,6 @@ const N = 200
 describe('db', function() {
   it('name', async function() {
     await safeCall(async db => {
-      let rt =await db.query('show variables like "%general%"')
-      console.log(rt)
       assert.equal(db.name, 'db')
     })
   })
@@ -137,5 +135,10 @@ describe('db', function() {
         assert.equal(rt.n, N)
       })
     })
+  })
+
+  //不close 测试用例不会退出 istanbul 也就无法统计覆盖了
+  it('close', async function() {
+    await Db.close()
   })
 })

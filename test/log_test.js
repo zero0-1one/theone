@@ -1,16 +1,16 @@
 'use strict'
 
-const assert = require('chai').assert
 const log = require('../lib/log')
 const { its } = require('zo-mocha-ext')
 
 describe('log', function() {
-  xit('easy config - stdout', async function() {
+  it('easy config - stdout', async function() {
     log.init({
-      'level': 'DEBUG',
+      'level': 'INFO',
       'type': 'stdout'
     })
 
+    //mocha 下没有输出, 只是测试下调用接口是否异常
     log.mark('this is mark log')
     log.fatal('this is fatal log')
     log.error('this is error log')
@@ -19,15 +19,23 @@ describe('log', function() {
     log.debug('this is debug %d log', 1)
     log.sql('this is sql log')
     log.trace('this log  will  not be show')
+    await log.shutdown()
   })
 
   its(10, 'easy config - stdout', async function() {
-    log.init({
-      'level': 'DEBUG',
-      'type': 'file',
-      'filename': './test/test_log/test.log',
+    this.beforeAll(() => {
+      this.timeout(5000)
+      this.slow(5000)
+      log.init({
+        'level': 'DEBUG',
+        'type': 'file',
+        'file': {
+          'filename': './test/test_log/test.log',
+          'pattern': '_yyyy-MM-dd_hh-mm-ss',
+          'compress': false
+        }
+      })
     })
-
     log.mark('this is mark log')
     log.fatal('this is fatal log')
     log.error('this is error log')
@@ -37,9 +45,11 @@ describe('log', function() {
     log.sql('this is sql log')
     log.trace('this log  will  not be show')
     await new Promise(resolve => {
-      setTimeout(resolve, 1000)
+      setTimeout(resolve, 200)
+    })
+    await this.afterAll(async () => {
+      await log.shutdown()
     })
   })
-
 
 })
