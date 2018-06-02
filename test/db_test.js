@@ -137,7 +137,7 @@ describe('db', function() {
     })
   })
 
-  //不close 测试用例不会退出 istanbul 也就无法统计覆盖了
+  //不close 测试用例不会退出 istanbul/nyc 也就无法统计覆盖了
   it('close', async function() {
     await Db.close()
   })

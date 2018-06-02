@@ -16,9 +16,10 @@ const defEnvironment = {
   //是否锁定 global变量,  true:禁止添加全局变量
   GLOBAL_LOCK: true,
 
-  //只有 ROOT_DIR 是绝对路径, 其他所有 路径配置都是相对 ROOT_DIR 的路径 使用 theone.path( other)
-  //默认当前工作目录
+
+  //绝对路径 默认当前工作目录 其他相当 ROOT_DIR 的相当路径可以使用 theone.path( other) 获取绝对路径
   ROOT_DIR: process.cwd(),
+  //相对 ROOT_DIR 的路径 
   CONFIG_DIR: './config',
 
   //可以指定自己的 Db类, 但必须继承至 require('theone-server').Db
