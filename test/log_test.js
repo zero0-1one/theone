@@ -31,7 +31,7 @@ describe('log', function() {
         'type': 'file',
         'file': {
           'filename': './test/test_log/test.log',
-          'pattern': '_yyyy-MM-dd_hh-mm-ss',
+          'pattern': '_yyyy-MM-dd_hh-mm',
           'compress': false
         }
       })

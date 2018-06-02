@@ -2,7 +2,7 @@
 
 const assert = require('chai').assert
 const path = require('path')
-const util = require('../lib/util')
+const toUtil = require('../lib/util')
 const config = require('../lib/config')
 
 const userConfig = {
@@ -47,12 +47,12 @@ describe('config', function() {
 
   it('load', function() {
     let data = config.load(path.join(__dirname + '/test_config'), '.js')
-    let cfg = util.deepCopy(config.DEF_CONFIG)
-    let defModules = util.deepCopy(config.DEF_CONFIG['modules'])
-    util.deepAssign(cfg, userConfig)
+    let cfg = toUtil.deepCopy(config.DEF_CONFIG)
+    let defModules = toUtil.deepCopy(config.DEF_CONFIG['modules'])
+    toUtil.deepAssign(cfg, userConfig)
     cfg['database'] = [cfg['database']]
-    cfg['modules'][0] = Object.assign(util.deepCopy(defModules), cfg['modules'][0])
-    cfg['modules'][1] = Object.assign(util.deepCopy(defModules), cfg['modules'][1])
+    cfg['modules'][0] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][0])
+    cfg['modules'][1] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][1])
     cfg['log']['file']['filename'] = data['appName']
     assert.deepEqual(data, cfg)
   })
