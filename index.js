@@ -31,48 +31,45 @@ const defEnvironment = {
 let theoneApp = undefined
 
 //通常 theone 的属性都需要在 create() 之后才能正常使用
-module.exports = {
-  create(environment = {}) {
-    if (theoneApp) {
-      throw new Error('Theone server has been initialized')
-    }
-    Object.freeze(Object.assign(this.env, defEnvironment, environment))
-    if (typeof this.env.NAMESPACE == 'string' && this.env.NAMESPACE != '') {
-      global[this.env.NAMESPACE] = this
-    }
-    if (this.env.GLOBAL_LOCK) {
-      require('./lib/global_lock')()
-    }
-    this.engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
-    let cfg = config.load(this.path(this.env.CONFIG_DIR))
-    toUtil.deepFreeze(Object.assign(this.config, cfg))
-    log.init(this.config['log'])
-    this.engine.start()
-    theoneApp = new App()
-    return theoneApp
-  },
 
-  async shutdown() {
-    if (!theoneApp) {
-      return
-    }
-    await theoneApp.close()
-    await Db.close()
-    await log.shutdown()
-    await this.engine.stop()
-    theoneApp = undefined
-    this.config = {}
-    this.env = {}
-  },
-
-  path(...paths) {
-    return path.join(this.env.ROOT_DIR, ...paths)
-  },
-
-  Db,
-  toUtil,
-  log,
-
-  config: {},
-  env: {},
+module.exports.create = function(environment = {}) {
+  if (theoneApp) {
+    throw new Error('Theone server has been initialized')
+  }
+  Object.freeze(Object.assign(this.env, defEnvironment, environment))
+  if (typeof this.env.NAMESPACE == 'string' && this.env.NAMESPACE != '') {
+    global[this.env.NAMESPACE] = this
+  }
+  if (this.env.GLOBAL_LOCK) {
+    require('./lib/global_lock')()
+  }
+  this.engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
+  let cfg = config.load(this.path(this.env.CONFIG_DIR))
+  toUtil.deepFreeze(Object.assign(this.config, cfg))
+  log.init(this.config['log'])
+  this.engine.start()
+  theoneApp = new App()
+  return theoneApp
 }
+
+module.exports.shutdown = async function() {
+  if (!theoneApp) {
+    return
+  }
+  await theoneApp.close()
+  await Db.close()
+  await log.shutdown()
+  await this.engine.close()
+  theoneApp = undefined
+  this.config = {}
+  this.env = {}
+}
+module.exports.path = function(...paths) {
+  return path.join(this.env.ROOT_DIR, ...paths)
+}
+
+module.exports.Db = Db
+module.exports.util = toUtil
+module.exports.log = log
+module.exports.config = {}
+module.exports.env = {}
