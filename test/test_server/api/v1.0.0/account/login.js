@@ -3,7 +3,7 @@
 module.exports = class {
   loginByEmailAction(email, password) {
     if (password.length < 5) {
-      throw new Error(' password is too short :' + password)
+      throw new Error('password is too short :' + password)
     }
     return [email, password]
   }
