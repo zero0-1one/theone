@@ -53,7 +53,7 @@ describe('config', function() {
     cfg['database'] = [cfg['database']]
     cfg['modules'][0] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][0])
     cfg['modules'][1] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][1])
-    cfg['log']['file']['filename'] = data['appName']
+    cfg['log']['file']['filename'] = './logs/' + data['appName'] + '.log'
     assert.deepEqual(data, cfg)
   })
 })

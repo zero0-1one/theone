@@ -20,10 +20,10 @@ module.exports = {
   }],
 
   'modules': [{
-    'name': 'api'
+    'name': 'api',
+    'multiVersion': true,
   }, {
     'name': 'admin',
-    'multiVersion': false,
     'autoTransaction': false
   }],
 

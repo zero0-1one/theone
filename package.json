@@ -1,5 +1,5 @@
 {
-  "name": "zo-theone-server",
+  "name": "zo-theone",
   "version": "0.0.0",
   "description": "A smart and very fast application server framework",
   "main": "index.js",
@@ -8,8 +8,7 @@
   },
   "keywords": [
     "theone",
-    "theone server",
-    "theone client",
+    "server",
     "app",
     "koa",
     "framework",
@@ -30,7 +29,7 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
-    "nyc": "^12.0.1",
+    "nyc": "^12.0.2",
     "zo-mocha-ext": "^1.0.2"
   },
   "author": "zero0-1one",

@@ -13,6 +13,7 @@ describe('modules', function() {
 
 //theone 服务器的测试 
 describe('theone', function() {
+  let app
   it('create no namespace', async function() {
 
     const env = {
@@ -21,7 +22,17 @@ describe('theone', function() {
       ROOT_DIR: path.join(__dirname, './test_server'),
       DEBUG: true
     }
-    let app = theone.create(env)
+    app = theone.create(env)
     app.runHttp()
+  })
+
+  
+  //等一下服务器完成启动才能关闭服务器
+  it('waiting', function(done) {
+    setTimeout(done, 2000)
+  })
+
+  it('close', async function() {
+    await theone.shutdown()
   })
 })

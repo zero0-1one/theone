@@ -46,7 +46,7 @@ module.exports.create = function(environment = {}) {
   this.engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
   let cfg = config.load(this.path(this.env.CONFIG_DIR))
   toUtil.deepFreeze(Object.assign(this.config, cfg))
-  log.init(this.config['log'])
+  log.init(this.config['log'], this.env.ROOT_DIR)
   this.engine.start()
   theoneApp = new App()
   return theoneApp
