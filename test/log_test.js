@@ -10,7 +10,7 @@ describe('log', function() {
       'type': 'stdout'
     })
 
-    //mocha 下没有输出, 只是测试下调用接口是否异常
+   
     log.mark('this is mark log')
     log.fatal('this is fatal log')
     log.error('this is error log')
