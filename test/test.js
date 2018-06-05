@@ -33,6 +33,6 @@ describe('theone', function() {
   })
 
   it('close', async function() {
-    await theone.shutdown()
+    // await theone.shutdown()
   })
 })

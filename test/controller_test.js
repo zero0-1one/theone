@@ -6,7 +6,7 @@ const controller = require('../lib/controller')
 
 
 
-describe('api_call', function() {
+describe('controller', function() {
   it('loadController', function() {
     let filePath = path.join(__dirname + '/test_api/v1.0/c.js')
     let data = controller.loadController(filePath, 'Action', 'c/')
