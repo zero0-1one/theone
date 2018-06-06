@@ -137,6 +137,24 @@ describe('db', function() {
     })
   })
 
+  it('batchInsert', async function() {
+    await clearTable()
+    await safeCall(async db => {
+      let data1 = []
+      let data2 = []
+      let COUNT = 5000
+      for (let i = 0; i < COUNT; i++) {
+        data1.push([null,'number', i])
+        data2.push(['array', i])
+      }
+      await db.batchInsert('test_table', 3, data1)
+      await db.batchInsert('test_table', ['k', 'v'], data2)
+      let rt = await db.executeOne('SELECT COUNT(*) n FROM test_table WHERE k = ?', 'number')
+      assert.equal(rt.n, COUNT)
+      rt = await db.executeOne('SELECT COUNT(*) n FROM test_table WHERE k = ?', 'array')
+      assert.equal(rt.n, COUNT)
+    })
+  })
   //不close 测试用例不会退出 istanbul/nyc 也就无法统计覆盖了
   // it('close', async function() {
   //   await Db.close()
