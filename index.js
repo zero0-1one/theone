@@ -31,6 +31,15 @@ const defEnvironment = {
 let theoneApp = undefined
 
 //通常 theone 的属性都需要在 create() 之后才能正常使用
+module.exports.Db = Db
+module.exports.util = toUtil
+module.exports.log = log
+module.exports.config = {}
+module.exports.env = {}
+
+module.exports.path = function(...paths) {
+  return path.join(this.env.ROOT_DIR, ...paths)
+}
 
 module.exports.create = function(environment = {}) {
   if (theoneApp) {
@@ -43,10 +52,13 @@ module.exports.create = function(environment = {}) {
   if (this.env.GLOBAL_LOCK) {
     require('./lib/global_lock')()
   }
-  this.engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
+
   let cfg = config.load(this.path(this.env.CONFIG_DIR))
   toUtil.deepFreeze(Object.assign(this.config, cfg))
   log.init(this.config['log'], this.env.ROOT_DIR)
+
+  let engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
+  this.engine = new engine()
   this.engine.start()
   theoneApp = new App()
   return theoneApp
@@ -64,12 +76,3 @@ module.exports.shutdown = async function() {
   this.config = {}
   this.env = {}
 }
-module.exports.path = function(...paths) {
-  return path.join(this.env.ROOT_DIR, ...paths)
-}
-
-module.exports.Db = Db
-module.exports.util = toUtil
-module.exports.log = log
-module.exports.config = {}
-module.exports.env = {}
