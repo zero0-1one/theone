@@ -61,6 +61,7 @@ module.exports.create = function(environment = {}) {
   this.engine = new engine()
   this.engine.start()
   theoneApp = new App()
+  
   return theoneApp
 }
 
