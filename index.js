@@ -4,6 +4,7 @@ const toUtil = require('./lib/util')
 const config = require('./lib/config')
 const Db = require('./lib/db')
 const log = require('./lib/log')
+const cache = require('./lib/cache')
 const App = require('./lib/app')
 const path = require('path')
 
@@ -34,6 +35,7 @@ let theoneApp = undefined
 module.exports.Db = Db
 module.exports.util = toUtil
 module.exports.log = log
+module.exports.cache = cache
 module.exports.config = {}
 module.exports.env = {}
 
@@ -56,12 +58,13 @@ module.exports.create = function(environment = {}) {
   let cfg = config.load(this.path(this.env.CONFIG_DIR))
   toUtil.deepFreeze(Object.assign(this.config, cfg))
   log.init(this.config['log'], this.env.ROOT_DIR)
+  cache.init(this.config['cache'], this.env.ROOT_DIR, log.error)
 
   let engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
   this.engine = new engine()
   this.engine.start()
   theoneApp = new App()
-  
+
   return theoneApp
 }
 

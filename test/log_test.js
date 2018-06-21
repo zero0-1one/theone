@@ -10,7 +10,7 @@ describe('log', function() {
       'type': 'stdout'
     })
 
-   
+
     log.mark('this is mark log')
     log.fatal('this is fatal log')
     log.error('this is error log')
@@ -32,7 +32,7 @@ describe('log', function() {
         'file': {
           'filename': './test/test_log/test.log',
           'pattern': '_yyyy-MM-dd_hh-mm',
-          'compress': false
+          'compress': false 
         }
       })
     })

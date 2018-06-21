@@ -60,5 +60,7 @@ typings/
 # next.js build output
 .next
 
-test/test_log/
+/test/test_log
+/test/test_cache
 /.vscode
+

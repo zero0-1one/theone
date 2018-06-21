@@ -50,10 +50,13 @@ describe('config', function() {
     let cfg = toUtil.deepCopy(config.DEF_CONFIG)
     let defModules = toUtil.deepCopy(config.DEF_CONFIG['modules'])
     toUtil.deepAssign(cfg, userConfig)
+    cfg['databaseMap'] = {
+      [cfg['database']['name']]:cfg['database']
+    }
     cfg['database'] = [cfg['database']]
     cfg['modules'][0] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][0])
     cfg['modules'][1] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][1])
-    cfg['log']['file']['filename'] = './logs/' + data['appName'] + '.log'
+    cfg['log']['file']['filename'] = './runtime/logs/' + data['appName'] + '.log'
     assert.deepEqual(data, cfg)
   })
 })
