@@ -26,6 +26,15 @@ const defEnvironment = {
   //可以指定自己的 Db类, 但必须继承至 require('theone-server').Db
   DB_CLASS: Db,
 
+  //可以指定自己的 CACHER 对象(不知道这使用内置的 fileCacher), 
+  //需要拥有 init, clear, get, set, gc 方法, 原型如下:
+  // init(isExpired)
+  // async clear(name)
+  // async get(name)
+  // async set(name, data)
+  // async gc(isExpired)
+  CACHER: cache.fileCacher,
+
   DEBUG: true
 }
 
@@ -58,7 +67,7 @@ module.exports.create = function(environment = {}) {
   let cfg = config.load(this.path(this.env.CONFIG_DIR))
   toUtil.deepFreeze(Object.assign(this.config, cfg))
   log.init(this.config['log'], this.env.ROOT_DIR)
-  cache.init(this.config['cache'], this.env.ROOT_DIR, log.error)
+  cache.init(this.config['cache'], this.env.ROOT_DIR, log.error, this.env.CACHER)
 
   let engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
   this.engine = new engine()
@@ -76,6 +85,7 @@ module.exports.shutdown = async function() {
   await Db.close()
   await log.shutdown()
   await this.engine.close()
+  await cache.close()
   theoneApp = undefined
   this.config = {}
   this.env = {}

@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@captemulation/get-parameter-names": "^1.2.0",
+    "compare-versions": "^3.3.0",
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.1",
     "koa-compose": "^4.1.0",

@@ -64,3 +64,4 @@ typings/
 /test/test_cache
 /.vscode
 
+/test/test_server/runtime
