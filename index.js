@@ -5,18 +5,19 @@ const config = require('./lib/config')
 const Db = require('./lib/db')
 const log = require('./lib/log')
 const cache = require('./lib/cache')
+const Tester = require('./lib/tester')
 const App = require('./lib/app')
 const path = require('path')
+
 
 /*
   默认环境 (环境属性是比config的属性更基础, 启动服务器最初需要的属性, 如 config的路径等)
 */
 const defEnvironment = {
-  //可以提供一个命名空间, 会创建一个全局变量(等价于 require('theone-server').theone ).  禁用设置为 '' 
+  //可以提供一个命名空间, 会创建一个 require('zo-theone') 引用的全局变量.  禁用设置为 '' 
   NAMESPACE: 'theone',
   //是否锁定 global变量,  true:禁止添加全局变量
   GLOBAL_LOCK: true,
-
 
   //绝对路径 默认当前工作目录 其他相当 ROOT_DIR 的相当路径可以使用 theone.path( other) 获取绝对路径
   ROOT_DIR: process.cwd(),
@@ -26,7 +27,7 @@ const defEnvironment = {
   //可以指定自己的 Db类, 但必须继承至 require('theone-server').Db
   DB_CLASS: Db,
 
-  //可以指定自己的 CACHER 对象(不知道这使用内置的 fileCacher), 
+  //可以指定自己的 CACHER 对象(默认使用内置的 fileCacher), 
   //需要拥有 init, clear, get, set, gc 方法, 原型如下:
   // init(isExpired)
   // async clear(name)
@@ -42,6 +43,7 @@ let theoneApp = undefined
 
 //通常 theone 的属性都需要在 create() 之后才能正常使用
 module.exports.Db = Db
+module.exports.Tester = Tester
 module.exports.util = toUtil
 module.exports.log = log
 module.exports.cache = cache

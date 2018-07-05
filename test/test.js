@@ -14,25 +14,29 @@ describe('modules', function() {
 //theone 服务器的测试 
 describe('theone', function() {
   let app
-  it('create no namespace', async function() {
-
-    const env = {
-      NAMESPACE: '',
-      //只有 ROOT_DIR 是绝对路径, 其他所有 路径配置都是相对 ROOT_DIR 的路径 使用 path.join(ROOT_DIR, other)
-      ROOT_DIR: path.join(__dirname, './test_server'),
-      DEBUG: true
-    }
-    app = theone.create(env)
-    app.runHttp()
+  describe('create no namespace', function() {
+    it('start', function() {
+      const env = {
+        NAMESPACE: '',
+        //只有 ROOT_DIR 是绝对路径, 其他所有 路径配置都是相对 ROOT_DIR 的路径 使用 path.join(ROOT_DIR, other)
+        ROOT_DIR: path.join(__dirname, './test_server'),
+        DEBUG: true
+      }
+      app = theone.create(env)
+      app.runHttp()
+    })
   })
 
-  
-  //等一下服务器完成启动才能关闭服务器
-  it('waiting', function(done) {
-    setTimeout(done, 2000)
-  })
+  require('./tester_test')
 
-  it('close', async function() {
-    await theone.shutdown()
+  describe('shut down', function() {
+    //等一下服务器完成启动才能关闭服务器
+    it('waiting', function(done) {
+      setTimeout(done, 2000)
+    })
+
+    it('close', async function() {
+      await theone.shutdown()
+    })
   })
 })
