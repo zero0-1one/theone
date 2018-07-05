@@ -16,7 +16,7 @@ const path = require('path')
 const defEnvironment = {
   //可以提供一个命名空间, 会创建一个 require('zo-theone') 引用的全局变量.  禁用设置为 '' 
   NAMESPACE: 'theone',
-  //是否锁定 global变量,  true:禁止添加全局变量
+  //是否锁定 global变量,  true:禁止添加全局变量,  如果为数组则指定允许的全局变量
   GLOBAL_LOCK: true,
 
   //绝对路径 默认当前工作目录 其他相当 ROOT_DIR 的相当路径可以使用 theone.path( other) 获取绝对路径
@@ -63,7 +63,7 @@ module.exports.create = function(environment = {}) {
     global[this.env.NAMESPACE] = this
   }
   if (this.env.GLOBAL_LOCK) {
-    require('./lib/global_lock')()
+    require('./lib/global_lock')(this.env.GLOBAL_LOCK)
   }
 
   let cfg = config.load(this.path(this.env.CONFIG_DIR))
