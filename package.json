@@ -23,15 +23,16 @@
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.1",
     "koa-compose": "^4.1.0",
-    "log4js": "^2.9.0",
+    "log4js": "^2.10.0",
     "mysql2": "^1.5.3",
+    "request": "^2.87.0",
     "zo-tail-f": "^1.0.4"
   },
   "devDependencies": {
     "chai": "^4.1.2",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2",
-    "zo-mocha-ext": "^1.0.2"
+    "zo-mocha-ext": "^1.0.3"
   },
   "author": "zero0-1one",
   "license": "MIT",

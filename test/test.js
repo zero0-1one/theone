@@ -5,6 +5,7 @@ const path = require('path')
 
 //独立模块测试, 与测试顺序无关
 describe('modules', function() {
+  require('./util_test')
   require('./config_test')
   require('./controller_test')
   require('./log_test')
