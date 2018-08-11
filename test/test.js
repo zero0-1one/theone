@@ -16,14 +16,14 @@ describe('modules', function() {
 describe('theone', function() {
   let app
   describe('create no namespace', function() {
-    it('start', function() {
+    it('start', async function() {
       const env = {
         NAMESPACE: '',
         //只有 ROOT_DIR 是绝对路径, 其他所有 路径配置都是相对 ROOT_DIR 的路径 使用 path.join(ROOT_DIR, other)
         ROOT_DIR: path.join(__dirname, './test_server'),
         DEBUG: true
       }
-      app = theone.create(env)
+      app = await theone.create(env)
       app.runHttp()
     })
   })

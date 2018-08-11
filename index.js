@@ -40,6 +40,7 @@ const defEnvironment = {
 }
 
 let theoneApp = undefined
+let initWaiting = undefined
 
 //通常 theone 的属性都需要在 create() 之后才能正常使用
 module.exports.Db = Db
@@ -54,10 +55,11 @@ module.exports.path = function(...paths) {
   return path.join(this.env.ROOT_DIR, ...paths)
 }
 
-module.exports.create = function(environment = {}) {
-  if (theoneApp) {
+module.exports.create = async function(environment = {}, init = () => {}) {
+  if (initWaiting) {
     throw new Error('Theone server has been initialized')
   }
+  initWaiting = toUtil.createWaiting()
   Object.freeze(Object.assign(this.env, defEnvironment, environment))
   if (typeof this.env.NAMESPACE == 'string' && this.env.NAMESPACE != '') {
     global[this.env.NAMESPACE] = this
@@ -73,9 +75,10 @@ module.exports.create = function(environment = {}) {
 
   let engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
   this.engine = new engine()
-  this.engine.start()
+  await this.engine.start()
+  await init()
   theoneApp = new App()
-
+  initWaiting.resolve()
   return theoneApp
 }
 
@@ -83,12 +86,14 @@ module.exports.shutdown = async function() {
   if (!theoneApp) {
     return
   }
+  await this.initWaiting
   await theoneApp.close()
   await Db.close()
   await log.shutdown()
   await this.engine.close()
   await cache.close()
   theoneApp = undefined
+  this.initWaiting = undefined
   this.config = {}
   this.env = {}
 }
