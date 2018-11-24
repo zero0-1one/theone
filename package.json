@@ -19,18 +19,18 @@
   },
   "dependencies": {
     "@captemulation/get-parameter-names": "^1.2.0",
-    "compare-versions": "^3.3.0",
-    "koa": "^2.5.2",
+    "compare-versions": "^3.4.0",
+    "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
     "koa-compose": "^4.1.0",
     "koa-static": "^5.0.0",
     "log4js": "^2.11.0",
-    "mysql2": "^1.6.1",
-    "request": "^2.87.0",
+    "mysql2": "^1.6.4",
+    "request": "^2.88.0",
     "zo-tail-f": "^1.0.4"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
+    "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "nyc": "^12.0.2",
     "zo-mocha-ext": "^1.0.3"

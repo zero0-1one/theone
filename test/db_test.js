@@ -42,6 +42,19 @@ describe('db', function() {
     })
   })
 
+  it('setLazyInit', async function() {
+    await safeCall(async db => {
+      let init = false
+      db.setLazyInit(() => {
+        init = true
+      })
+      await db.beginTransaction()
+      assert.isFalse(init)
+      await db.query('SELECT COUNT(*) FROM test_table')
+      assert.isTrue(init)
+    })
+  })
+
   its_par(N, 'query and queryOne', async function() {
     let iter = this.iteration
     await this.beforeAll(clearTable)
@@ -144,11 +157,30 @@ describe('db', function() {
       let data2 = []
       let COUNT = 5000
       for (let i = 0; i < COUNT; i++) {
-        data1.push([null,'number', i])
+        data1.push([null, 'number', i])
         data2.push(['array', i])
       }
       await db.batchInsert('test_table', 3, data1)
       await db.batchInsert('test_table', ['k', 'v'], data2)
+      let rt = await db.executeOne('SELECT COUNT(*) n FROM test_table WHERE k = ?', 'number')
+      assert.equal(rt.n, COUNT)
+      rt = await db.executeOne('SELECT COUNT(*) n FROM test_table WHERE k = ?', 'array')
+      assert.equal(rt.n, COUNT)
+    })
+  })
+
+  it('batchReplace', async function() {
+    await clearTable()
+    await safeCall(async db => {
+      let data1 = []
+      let data2 = []
+      let COUNT = 5000
+      for (let i = 0; i < COUNT; i++) {
+        data1.push([null, 'number', i])
+        data2.push(['array', i])
+      }
+      await db.batchReplace('test_table', 3, data1)
+      await db.batchReplace('test_table', ['k', 'v'], data2)
       let rt = await db.executeOne('SELECT COUNT(*) n FROM test_table WHERE k = ?', 'number')
       assert.equal(rt.n, COUNT)
       rt = await db.executeOne('SELECT COUNT(*) n FROM test_table WHERE k = ?', 'array')
