@@ -28,6 +28,7 @@ module.exports = {
   }],
 
   'log': {
+    'type': 'file',
     'sqlLog': true
   }
 }
