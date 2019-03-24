@@ -13,8 +13,8 @@ const options = {
   'connectionLimit': 5
 }
 
-async function safeCall(todo) {
-  let db = new Db(options)
+async function safeCall(todo, opts = options, mustInTrans = false) {
+  let db = new Db(opts, mustInTrans)
   try {
     await todo(db)
   } finally {
@@ -54,6 +54,21 @@ describe('db', function() {
       assert.isTrue(init)
     })
   })
+
+  it('mustInTrans', async function() {
+    await safeCall(async db => {
+      let isThrow = false
+      try {
+        await db.query('SELECT COUNT(*) FROM test_table')
+      } catch (error) {
+        isThrow = true
+      }
+      assert.isTrue(isThrow)
+      await db.beginTransaction()
+      await db.query('SELECT COUNT(*) FROM test_table')
+    }, options, true)
+  })
+
 
   its_par(N, 'query and queryOne', async function() {
     let iter = this.iteration
