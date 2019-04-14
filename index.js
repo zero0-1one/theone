@@ -5,7 +5,6 @@ const config = require('./lib/config')
 const Db = require('./lib/db')
 const log = require('./lib/log')
 const cache = require('./lib/cache')
-const Tester = require('./lib/tester')
 const App = require('./lib/app')
 const path = require('path')
 
@@ -44,7 +43,6 @@ let initWaiting = undefined
 
 //通常 theone 的属性都需要在 create() 之后才能正常使用
 module.exports.Db = Db
-module.exports.Tester = Tester
 module.exports.util = toUtil
 module.exports.log = log
 module.exports.cache = cache

@@ -14,7 +14,9 @@ const options = {
 }
 
 async function safeCall(todo, opts = options, mustInTrans = false) {
-  let db = new Db(opts, mustInTrans)
+  opts = JSON.parse(JSON.stringify(opts))
+  opts['mustInTrans'] = mustInTrans
+  let db = new Db(opts)
   try {
     await todo(db)
   } finally {
