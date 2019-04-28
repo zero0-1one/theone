@@ -35,6 +35,8 @@ describe('theone', function () {
       setTimeout(done, 2000)
     })
 
+    require('./server_test')
+
     it('close', async function () {
       await theone.shutdown()
     })
