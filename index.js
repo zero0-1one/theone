@@ -13,6 +13,9 @@ const path = require('path')
   默认环境 (环境属性是比config的属性更基础, 启动服务器最初需要的属性, 如 config的路径等)
 */
 const defEnvironment = {
+  //决定多配置表使用哪一个
+  ENV_NAME: '',
+
   //可以提供一个命名空间, 会创建一个 require('zo-theone') 引用的全局变量.  禁用设置为 '' 
   NAMESPACE: 'theone',
   //是否锁定 global变量,  true:禁止添加全局变量,  如果为数组则指定允许的全局变量

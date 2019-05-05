@@ -39,19 +39,19 @@ const userConfig = {
   }
 }
 
-describe('config', function() {
-  it('loadDir', function() {
-    let data = config.loadDir({}, path.join(__dirname + '/test_config'), '.js')
+describe('config', function () {
+  it('loadDir', function () {
+    let data = config.loadDir({}, path.join(__dirname + '/test_config'))
     assert.deepEqual(data, userConfig)
   })
 
-  it('load', function() {
-    let data = config.load(path.join(__dirname + '/test_config'), '.js')
+  it('load', function () {
+    let data = config.load(path.join(__dirname + '/test_config'))
     let cfg = toUtil.deepCopy(config.DEF_CONFIG)
     let defModules = toUtil.deepCopy(config.DEF_CONFIG['modules'])
     toUtil.deepAssign(cfg, userConfig)
     cfg['databaseMap'] = {
-      [cfg['database']['name']]:cfg['database']
+      [cfg['database']['name']]: cfg['database']
     }
     cfg['database'] = [cfg['database']]
     cfg['modules'][0] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][0])
