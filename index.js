@@ -71,7 +71,7 @@ module.exports.create = async function (environment = {}, init = () => { }) {
     require('./lib/global_lock')(this.env.GLOBAL_LOCK)
   }
 
-  let cfg = config.load(this.path(this.env.CONFIG_DIR))
+  let cfg = config.load(this.path(this.env.CONFIG_DIR), this.env.ENV_NAME)
   toUtil.deepFreeze(Object.assign(this.config, cfg))
   log.init(this.config['log'], this.env.ROOT_DIR)
   cache.init(this.config['cache'], this.env.ROOT_DIR, log.error, this.env.CACHER)
