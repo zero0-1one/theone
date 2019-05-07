@@ -4,14 +4,14 @@ let theone = require('..')
 const path = require('path')
 
 //独立模块测试, 与测试顺序无关
-describe('modules', function () {
-  require('./util_test')
-  require('./config_test')
-  require('./controller_test')
-  require('./log_test')
-  require('./db_test')
-  require('./cache_test')
-})
+// describe('modules', function () {
+//   require('./util_test')
+//   require('./config_test')
+//   require('./controller_test')
+//   require('./log_test')
+//   require('./db_test')
+//   require('./cache_test')
+// })
 
 //theone 服务器的测试 
 describe('theone', function () {
@@ -27,18 +27,19 @@ describe('theone', function () {
       app = await theone.create(env)
       app.runHttp()
     })
+
+    
   })
+  require('./tester_test')
 
-  describe('shut down', function () {
-    //等一下服务器完成启动才能关闭服务器
-    it('waiting', function (done) {
-      setTimeout(done, 2000)
-    })
+  // describe('shut down', function () {
+  //   //等一下服务器完成启动才能关闭服务器
+  //   it('waiting', function (done) {
+  //     setTimeout(done, 2000)
+  //   })
 
-    require('./server_test')
-
-    it('close', async function () {
-      await theone.shutdown()
-    })
-  })
+  //   it('close', async function () {
+  //     await theone.shutdown()
+  //   })
+  // })
 })
