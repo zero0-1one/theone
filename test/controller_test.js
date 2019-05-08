@@ -6,15 +6,15 @@ const controller = require('../lib/controller')
 
 
 
-describe('controller', function() {
-  it('loadController', function() {
+describe('controller', function () {
+  it('loadController', function () {
     let filePath = path.join(__dirname + '/test_api/v1.0/c.js')
     let data = controller.loadController(filePath, 'Action', 'c/')
     assert.deepEqual(data['c'].actions['c_2'].params, ['a', 'b'])
     assert.deepEqual(data['c'].actions['c_4'].params, ['x', 'y'])
   })
 
-  it('loadModule', function() {
+  it('loadModule', function () {
     let modulePath = path.join(__dirname + '/test_api/v1.0')
     let data = controller.loadModule(modulePath, 'Action')
     let expectation = [
@@ -27,7 +27,7 @@ describe('controller', function() {
     assert.deepEqual(data['c'].actions['c_4'].params, ['x', 'y'])
   })
 
-  it('loadVersions', function() {
+  it('loadVersions', function () {
     let data = controller.loadVersions(path.join(__dirname + '/test_api'), 'Action')
     assert.hasAllKeys(data, ['v1.0', 'v1.1'])
     let expectation0 = [
@@ -40,7 +40,7 @@ describe('controller', function() {
     assert.hasAllKeys(data['v1.1'], expectation1)
   })
 
-  it('load', function() {
+  it('load', function () {
 
   })
 })

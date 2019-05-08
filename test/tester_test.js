@@ -18,6 +18,13 @@ describe('tester', function () {
     assert.deepEqual(rt, ['123456', 'abcdef'])
   })
 
+
+  it('set and get session', async function () {
+    await tester.get('account/login/setSession', { data: 123 })
+    let rt = await tester.get('account/login/getSession')
+    assert.deepEqual(rt, 123)
+  })
+
   // describe('nodb parallel', function () {
 
   //   its_par(N, 'succeed (nodb)', async function () {

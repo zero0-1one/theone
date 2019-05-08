@@ -4,14 +4,14 @@ let theone = require('..')
 const path = require('path')
 
 //独立模块测试, 与测试顺序无关
-describe('modules', function () {
-  require('./util_test')
-  require('./config_test')
-  require('./controller_test')
-  require('./log_test')
-  require('./db_test')
-  require('./cache_test')
-})
+// describe('modules', function () {
+//   require('./util_test')
+//   require('./config_test')
+//   require('./controller_test')
+//   require('./log_test')
+//   require('./db_test')
+//   require('./cache_test')
+// })
 
 //theone 服务器的测试 
 describe('theone', function () {
@@ -25,10 +25,11 @@ describe('theone', function () {
         DEBUG: true
       }
       app = await theone.create(env)
+      app.koa.keys = ['adsfasdfahd#gfbn$', 'cads#@sdfadfv']
       app.runHttp()
     })
 
-    
+
   })
   require('./tester_test')
 

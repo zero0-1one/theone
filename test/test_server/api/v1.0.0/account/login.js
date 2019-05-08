@@ -11,4 +11,14 @@ module.exports = class {
   loginByPhoneAction(phone, password) {
     return [phone, password]
   }
+
+  setSessionAction(data) {
+    this.ctx.session.data = data
+    return data
+  }
+
+
+  getSessionAction() {
+    return this.ctx.session.data
+  }
 }
