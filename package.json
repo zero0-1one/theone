@@ -23,6 +23,7 @@
     "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
     "koa-compose": "^4.1.0",
+    "koa-session": "^5.11.0",
     "koa-static": "^5.0.0",
     "log4js": "^2.11.0",
     "mysql2": "^1.6.4",
