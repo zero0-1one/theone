@@ -26,6 +26,9 @@ describe('theone', function () {
       }
       app = await theone.create(env)
       app.koa.keys = ['adsfasdfahd#gfbn$', 'cads#@sdfadfv']
+      app.actionUse(async (data, next) => {
+        return next()
+      })
       app.runHttp()
     })
 
