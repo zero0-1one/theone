@@ -3,7 +3,7 @@
 let theone = require('..')
 const path = require('path')
 
-//独立模块测试, 与测试顺序无关
+// 独立模块测试, 与测试顺序无关
 describe('modules', function () {
   require('./util_test')
   require('./config_test')
@@ -26,16 +26,11 @@ describe('theone', function () {
       }
       app = await theone.create(env)
       app.koa.keys = ['adsfasdfahd#gfbn$', 'cads#@sdfadfv']
-      app.actionUse(async (data, next) => {
-        return next()
-      })
       app.runHttp()
     })
-
-
   })
   require('./tester_test')
-  
+
   describe('shut down', function () {
     //等一下服务器完成启动才能关闭服务器
     it('waiting', function (done) {

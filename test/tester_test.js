@@ -13,6 +13,14 @@ let clearTable = async function () {
 const N = 1
 
 describe('tester', function () {
+
+  it('getCallMid', async function () {
+    await tester.get('account/login/getCallMid')
+    let rt = await tester.get('account/login/getCallMid')
+    assert.deepEqual(rt, ['midA', 'midC'])
+  })
+
+
   its_par(N, 'request', async function () {
     let rt = await tester.get('account/login/loginByPhone', { phone: '123456', password: 'abcdef' })
     assert.deepEqual(rt, ['123456', 'abcdef'])

@@ -16,7 +16,7 @@ describe('controller', function () {
 
   it('loadModule', function () {
     let modulePath = path.join(__dirname + '/test_api/v1.0')
-    let data = controller.loadModule(modulePath, 'Action')
+    let data = controller.loadModule(modulePath, '', 'Action')
     let expectation = [
       'c',
       'a/a1', 'a/a2', 'a/aa/aa1', 'a/aa/aa2', 'a/aa/aaa/aaa1',
@@ -28,7 +28,7 @@ describe('controller', function () {
   })
 
   it('loadVersions', function () {
-    let data = controller.loadVersions(path.join(__dirname + '/test_api'), 'Action')
+    let data = controller.loadVersions(path.join(__dirname + '/test_api'), '', 'Action')
     assert.hasAllKeys(data, ['v1.0', 'v1.1'])
     let expectation0 = [
       'c',
@@ -41,6 +41,6 @@ describe('controller', function () {
   })
 
   it('load', function () {
-    
+
   })
 })
