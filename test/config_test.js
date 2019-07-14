@@ -48,6 +48,7 @@ describe('config', function () {
   it('load', function () {
     let data = config.load(path.join(__dirname + '/test_config'))
     let cfg = toUtil.deepCopy(config.DEF_CONFIG)
+    cfg.session.store = config.DEF_CONFIG.session.store
     let defModules = toUtil.deepCopy(config.DEF_CONFIG['modules'])
     toUtil.deepAssign(cfg, userConfig)
     cfg['databaseMap'] = {

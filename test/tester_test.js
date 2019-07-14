@@ -29,8 +29,9 @@ describe('tester', function () {
 
   it('set and get session', async function () {
     await tester.get('account/login/setSession', { data: 123 })
+    await tester.get('account/login/setSession', { data: 234 })
     let rt = await tester.get('account/login/getSession')
-    assert.deepEqual(rt, 123)
+    assert.deepEqual(rt, 234)
   })
 
   // describe('nodb parallel', function () {

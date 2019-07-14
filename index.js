@@ -18,7 +18,7 @@ const defEnvironment = {
   //决定多配置表使用哪一个
   ENV_NAME: '',
 
-  //可以提供一个命名空间, 会创建一个 require('zo-theone') 引用的全局变量.  禁用设置为 '' 
+  //可以提供一个额外的命名空间, 会创建一个 require('zo-theone') 引用的全局变量.  
   NAMESPACE: 'theone',
   //是否锁定 global变量,  true:禁止添加全局变量,  如果为数组则指定允许的全局变量
   GLOBAL_LOCK: true,
@@ -66,7 +66,8 @@ module.exports.create = async function (environment = {}, init = () => { }) {
   }
   initWaiting = toUtil.createWaiting()
   Object.freeze(Object.assign(this.env, defEnvironment, environment))
-  if (typeof this.env.NAMESPACE == 'string' && this.env.NAMESPACE != '') {
+  global['theone'] = this //始终有 theone 全局对象
+  if (typeof this.env.NAMESPACE == 'string' && this.env.NAMESPACE != 'theone') {
     global[this.env.NAMESPACE] = this
   }
   if (this.env.GLOBAL_LOCK) {

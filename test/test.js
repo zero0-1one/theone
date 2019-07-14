@@ -9,7 +9,7 @@ describe('modules', function () {
   require('./config_test')
   require('./controller_test')
   require('./log_test')
-  require('./db_test')
+  // require('./db_test')
   require('./cache_test')
 })
 
