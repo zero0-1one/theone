@@ -10,7 +10,6 @@ describe('log', function() {
       'type': 'stdout'
     })
 
-
     log.mark('this is mark log')
     log.fatal('this is fatal log')
     log.error('this is error log')
@@ -32,7 +31,7 @@ describe('log', function() {
         'file': {
           'filename': './test/test_log/test.log',
           'pattern': '_yyyy-MM-dd_hh-mm',
-          'compress': false 
+          'compress': false
         }
       })
     })
@@ -52,4 +51,19 @@ describe('log', function() {
     })
   })
 
+  its(3, 'pm2', async function() {
+    process.env.pm_id = '' + this.iteration
+    log.init({
+      'level': 'info',
+      'type': 'file',
+      'file': {
+        'filename': './test/test_log/test.log',
+        'pattern': '_yyyy-MM-dd_hh-mm',
+        'compress': false
+      }
+    })
+    log.info('this is info log. pm_id:' + this.iteration)
+    delete process.env.pm_id
+    await log.shutdown()
+  })
 })
