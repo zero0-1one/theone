@@ -9,8 +9,6 @@ const App = require('./lib/app')
 const Tester = require('./lib/tester')
 const Response = require('./lib/response')
 const path = require('path')
-
-
 /*
   默认环境 (环境属性是比config的属性更基础, 启动服务器最初需要的属性, 如 config的路径等)
 */
@@ -18,20 +16,20 @@ const defEnvironment = {
   //决定多配置表使用哪一个
   ENV_NAME: '',
 
-  //可以提供一个额外的命名空间, 会创建一个 require('zo-theone') 引用的全局变量.  
+  //可以提供一个额外的命名空间, 会创建一个 require('zo-theone') 引用的全局变量.
   NAMESPACE: 'theone',
   //是否锁定 global变量,  true:禁止添加全局变量,  如果为数组则指定允许的全局变量
   GLOBAL_LOCK: true,
 
   //绝对路径 默认当前工作目录 其他相当 ROOT_DIR 的相当路径可以使用 theone.path( other) 获取绝对路径
   ROOT_DIR: process.cwd(),
-  //相对 ROOT_DIR 的路径 
+  //相对 ROOT_DIR 的路径
   CONFIG_DIR: './config',
 
   //可以指定自己的 Db类, 但必须继承至 require('theone-server').Db
   DB_CLASS: Db,
 
-  //可以指定自己的 CACHER 对象(默认使用内置的 fileCacher), 
+  //可以指定自己的 CACHER 对象(默认使用内置的 fileCacher),
   //需要拥有 init, clear, get, set, gc 方法, 原型如下:
   // init(isExpired)
   // async clear(name)
@@ -56,11 +54,19 @@ module.exports.env = {}
 module.exports.Tester = Tester
 module.exports.Response = Response
 
-module.exports.path = function (...paths) {
+module.exports.path = function(...paths) {
   return path.join(this.env.ROOT_DIR, ...paths)
 }
 
-module.exports.create = async function (environment = {}, init = () => { }) {
+module.exports.pathNormalize = function(p) {
+  if (path.isAbsolutep) {
+    return path.normalize(p)
+  } else {
+    return path.join(this.env.ROOT_DIR, p)
+  }
+}
+
+module.exports.create = async function(environment = {}, init = () => {}) {
   if (initWaiting) {
     throw new Error('Theone server has been initialized')
   }
@@ -88,7 +94,7 @@ module.exports.create = async function (environment = {}, init = () => { }) {
   return theoneApp
 }
 
-module.exports.shutdown = async function () {
+module.exports.shutdown = async function() {
   if (!theoneApp) {
     return
   }
