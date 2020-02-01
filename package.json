@@ -40,9 +40,9 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zero0-1one/theone-server.git"
+    "url": "git+https://github.com/zero0-1one/theone.git"
   },
   "bugs": {
-    "url": "https://github.com/zero0-1one/theone-server/issues"
+    "url": "https://github.com/zero0-1one/theone/issues"
   }
 }
