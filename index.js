@@ -59,7 +59,7 @@ module.exports.path = function(...paths) {
 }
 
 module.exports.pathNormalize = function(p) {
-  if (path.isAbsolutep) {
+  if (path.isAbsolute(p)) {
     return path.normalize(p)
   } else {
     return path.join(this.env.ROOT_DIR, p)
