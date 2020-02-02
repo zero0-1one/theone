@@ -58,19 +58,22 @@ describe('db', function() {
   })
 
   it('mustInTrans', async function() {
-    await safeCall(async db => {
-      let isThrow = false
-      try {
+    await safeCall(
+      async db => {
+        let isThrow = false
+        try {
+          await db.query('SELECT COUNT(*) FROM test_table')
+        } catch (error) {
+          isThrow = true
+        }
+        assert.isTrue(isThrow)
+        await db.beginTransaction()
         await db.query('SELECT COUNT(*) FROM test_table')
-      } catch (error) {
-        isThrow = true
-      }
-      assert.isTrue(isThrow)
-      await db.beginTransaction()
-      await db.query('SELECT COUNT(*) FROM test_table')
-    }, options, true)
+      },
+      options,
+      true
+    )
   })
-
 
   its_par(N, 'query and queryOne', async function() {
     let iter = this.iteration
@@ -83,15 +86,13 @@ describe('db', function() {
       let rt = await db.query('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
       assert.deepEqual(rt, [
         { id: id1, k: 'a', v: iter },
-        { id: id2, k: 'b', v: iter },
+        { id: id2, k: 'b', v: iter }
       ])
       await db.query('DELETE FROM test_table WHERE k=? and v=?', ['a', iter])
       await db.query('UPDATE test_table SET k=CONCAT("u",k) WHERE v=?', iter)
 
       rt = await db.query('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
-      assert.deepEqual(rt, [
-        { id: id2, k: 'ub', v: iter }
-      ])
+      assert.deepEqual(rt, [{ id: id2, k: 'ub', v: iter }])
     })
     await this.afterAll(async () => {
       await safeCall(async db => {
@@ -112,14 +113,12 @@ describe('db', function() {
       let rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
       assert.deepEqual(rt, [
         { id: id1, k: 'a', v: iter },
-        { id: id2, k: 'b', v: iter },
+        { id: id2, k: 'b', v: iter }
       ])
       await db.execute('DELETE FROM test_table WHERE k=? and v=?', ['a', iter])
       await db.execute('UPDATE test_table SET k=CONCAT("u",k) WHERE v=?', iter)
       rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
-      assert.deepEqual(rt, [
-        { id: id2, k: 'ub', v: iter }
-      ])
+      assert.deepEqual(rt, [{ id: id2, k: 'ub', v: iter }])
     })
     await this.afterAll(async () => {
       await safeCall(async db => {
@@ -129,30 +128,56 @@ describe('db', function() {
     })
   })
 
+  its_par(N, 'executeM', async function() {
+    let iter = this.iteration
+    await this.beforeAll(clearTable)
+    await safeCall(async db => {
+      let data = await db.executeM([
+        ['INSERT INTO test_table VALUES(null,?,?)', ['a', iter]],
+        ['INSERT INTO test_table VALUES(null,?,?)', ['b', iter]]
+      ])
+      let rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY k', iter)
+      assert.deepEqual(rt, [
+        { id: data[0].insertId, k: 'a', v: iter },
+        { id: data[1].insertId, k: 'b', v: iter }
+      ])
+    })
+  })
+
+  its_par(N, 'queryM', async function() {
+    let iter = this.iteration
+    await this.beforeAll(clearTable)
+    await safeCall(async db => {
+      let data = await db.queryM([
+        ['INSERT INTO test_table VALUES(null,?,?)', ['a', iter]],
+        ['INSERT INTO test_table VALUES(null,?,?)', ['b', iter]]
+      ])
+      let rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY k', iter)
+      assert.deepEqual(rt, [
+        { id: data[0].insertId, k: 'a', v: iter },
+        { id: data[1].insertId, k: 'b', v: iter }
+      ])
+    })
+  })
+
   its_par(N, 'transaction', async function() {
     let iter = this.iteration
     await this.beforeAll(clearTable)
     await safeCall(async db => {
-
       let id1 = (await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['a', iter])).insertId
       await db.beginTransaction()
       await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['r', iter])
       await db.rollback()
 
-
       let rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
-      assert.deepEqual(rt, [
-        { id: id1, k: 'a', v: iter },
-      ])
+      assert.deepEqual(rt, [{ id: id1, k: 'a', v: iter }])
 
       await db.beginTransaction()
       await db.execute('DELETE FROM test_table WHERE k=? and v=?', ['a', iter])
       let id2 = (await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['b', iter])).insertId
       await db.commit()
       rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
-      assert.deepEqual(rt, [
-        { id: id2, k: 'b', v: iter }
-      ])
+      assert.deepEqual(rt, [{ id: id2, k: 'b', v: iter }])
 
       //添加 n1, n2 不提交也不关闭,测试release 后事务会不会返回池内再分配给其他使用
       await db.beginTransaction()
