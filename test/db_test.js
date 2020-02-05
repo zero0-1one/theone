@@ -137,8 +137,8 @@ describe('db', function () {
         [['a', iter, 'b', iter, 'c', iter, 'd', iter]]
       )
       await db.execute(
-        'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [[['e', iter], ['f', iter], ['g', iter], ['h', iter]]]
+        'INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)',
+        ['e', iter, [['f', iter], ['g', iter]], 'h', iter]
       )
 
       await db.execute(
@@ -174,8 +174,8 @@ describe('db', function () {
         [['a', iter, 'b', iter, 'c', iter, 'd', iter]]
       )
       await db.query(
-        'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [[['e', iter], ['f', iter], ['g', iter], ['h', iter]]]
+        'INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)',
+        ['e', iter, [['f', iter], ['g', iter]], 'h', iter]
       )
 
       await db.query(
