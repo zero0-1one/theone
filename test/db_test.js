@@ -13,15 +13,10 @@ const options = {
   'connectionLimit': 5
 }
 
-async function safeCall(todo, opts = options, mustInTrans = false) {
+async function safeCall(cb, opts = options, mustInTrans = false) {
   opts = JSON.parse(JSON.stringify(opts))
   opts['mustInTrans'] = mustInTrans
-  let db = new Db(opts)
-  try {
-    await todo(db)
-  } finally {
-    db.release()
-  }
+  return Db.safeCall(cb, opts)
 }
 
 async function clearTable() {
