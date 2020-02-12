@@ -52,6 +52,14 @@ describe('db', function () {
     })
   })
 
+  it('isInit', async function () {
+    await safeCall(async db => {
+      assert.isFalse(db.isInit())
+      await db.query('SELECT COUNT(*) FROM test_table')
+      assert.isTrue(db.isInit())
+    })
+  })
+
   it('mustInTrans', async function () {
     await safeCall(
       async db => {

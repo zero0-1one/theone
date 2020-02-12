@@ -54,11 +54,11 @@ module.exports.env = {}
 module.exports.Tester = Tester
 module.exports.Response = Response
 
-module.exports.path = function(...paths) {
+module.exports.path = function (...paths) {
   return path.join(this.env.ROOT_DIR, ...paths)
 }
 
-module.exports.pathNormalize = function(p) {
+module.exports.pathNormalize = function (p) {
   if (path.isAbsolute(p)) {
     return path.normalize(p)
   } else {
@@ -66,7 +66,7 @@ module.exports.pathNormalize = function(p) {
   }
 }
 
-module.exports.create = async function(environment = {}, init = () => {}) {
+module.exports.create = async function (environment = {}, init = () => { }) {
   if (initWaiting) {
     throw new Error('Theone server has been initialized')
   }
@@ -94,7 +94,7 @@ module.exports.create = async function(environment = {}, init = () => {}) {
   return theoneApp
 }
 
-module.exports.shutdown = async function() {
+module.exports.shutdown = async function () {
   if (!theoneApp) {
     return
   }
