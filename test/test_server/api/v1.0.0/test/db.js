@@ -13,7 +13,7 @@ module.exports = class {
 
   async errorAction(key, value) {
     await this.db.execute('INSERT INTO test_table VALUES(null,?,?)', [key, value])
-    return this.error(-2, 'error')
+    return this.error('error')
   }
 
   async clearTableAction() {
@@ -24,5 +24,9 @@ module.exports = class {
   async getRowsAction() {
     let rt = await this.db.executeOne('SELECT COUNT(*) n FROM test_table')
     return rt.n
+  }
+
+  async getModelAction() {
+    return this.model('test').name()
   }
 }

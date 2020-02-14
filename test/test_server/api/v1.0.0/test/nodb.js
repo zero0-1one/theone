@@ -6,11 +6,12 @@ module.exports = class {
   }
 
   failedAction() {
+    console.log('failedAction')
     return this.failed('failed')
   }
 
   errorAction() {
-    return this.error(-2, 'error')
+    return this.error('error')
   }
 
 

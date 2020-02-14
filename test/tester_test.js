@@ -34,118 +34,126 @@ describe('tester', function () {
     assert.deepEqual(rt, 234)
   })
 
-  // describe('nodb parallel', function () {
+  describe('nodb parallel', function () {
 
-  //   its_par(N, 'succeed (nodb)', async function () {
-  //     let rt = await tester.get('test/nodb/succeed')
-  //     assert.deepEqual(rt, { status: 1, data: 'succeed' })
-  //   })
+    its_par(N, 'succeed (nodb)', async function () {
+      let rt = await tester.get('test/nodb/succeed')
+      assert.deepEqual(rt, 'succeed')
+    })
 
-  //   its_par(N, 'failed (nodb)', async function () {
-  //     let rt = await tester.request('test/nodb/failed')
-  //     assert.deepEqual(rt, { status: 0, msg: 'failed' })
-  //   })
+    its_par(N, 'failed (nodb)', async function () {
+      let rt = await tester.request('get', 'test/nodb/failed')
+      assert.deepEqual(rt, 'failed')
+    })
 
-  //   its_par(N, 'error (nodb)', async function () {
-  //     let rt = await tester.request('test/nodb/error')
-  //     assert.equal(rt.status, -2)
-  //   })
+    its_par(N, 'error (nodb)', async function () {
+      let rt = await tester.request('get', 'test/nodb/error')
+      assert.equal(rt, 'error')
+    })
 
-  //   its_par(N, 'throw (nodb)', async function () {
-  //     let rt = await tester.request('test/nodb/throw')
-  //     assert.equal(rt.status, -1)
-  //   })
-  // })
+    its_par(N, 'throw (nodb)', async function () {
+      let isThrow = false
+      let rt = await tester.request('post', 'test/nodb/throw').catch(() => {
+        isThrow = true
+      })
+      assert.isTrue(isThrow)
+    })
+  })
 
-  // describe('db parallel', function () {
-  //   its_par(N, 'succeed (db)', async function () {
-  //     await this.beforeAll(clearTable)
-  //     let iter = this.iteration
-  //     let rt = await tester.request('test/db/succeed', { key: 'aaa', value: iter })
-  //     assert.deepEqual(rt, { status: 1, data: 'succeed' })
-  //     await this.afterAll(async () => {
-  //       let rt = await tester.call('test/db/getRows')
-  //       assert.equal(rt, N)
-  //     })
-  //   })
+  describe('db parallel', function () {
+    its_par(N, 'succeed (db)', async function () {
+      await this.beforeAll(clearTable)
+      let iter = this.iteration
+      let rt = await tester.get('test/db/succeed', { key: 'aaa', value: iter })
+      assert.deepEqual(rt, 'succeed')
+      await this.afterAll(async () => {
+        let rt = await tester.get('test/db/getRows')
+        assert.equal(rt, N)
+      })
+    })
 
-  //   its_par(N, 'failed (db)', async function () {
-  //     await this.beforeAll(clearTable)
-  //     let iter = this.iteration
-  //     let rt = await tester.request('test/db/failed', { key: 'aaa', value: iter })
-  //     assert.deepEqual(rt, { status: 0, msg: 'failed' })
-  //     await this.afterAll(async () => {
-  //       let rt = await tester.call('test/db/getRows')
-  //       assert.equal(rt, N)
-  //     })
-  //   })
+    its_par(N, 'failed (db)', async function () {
+      await this.beforeAll(clearTable)
+      let iter = this.iteration
+      let rt = await tester.get('test/db/failed', { key: 'aaa', value: iter })
+      assert.deepEqual(rt, 'failed')
+      await this.afterAll(async () => {
+        let rt = await tester.get('test/db/getRows')
+        assert.equal(rt, N)
+      })
+    })
 
-  //   its_par(N, 'error (db)', async function () {
-  //     await this.beforeAll(clearTable)
-  //     let iter = this.iteration
-  //     let rt = await tester.request('test/db/error', { key: 'aaa', value: iter })
-  //     assert.equal(rt.status, -2)
-  //     await this.afterAll(async () => {
-  //       let rt = await tester.call('test/db/getRows')
-  //       assert.equal(rt, 0)
-  //     })
-  //   })
+    its_par(N, 'error (db)', async function () {
+      await this.beforeAll(clearTable)
+      let iter = this.iteration
+      let rt = await tester.get('test/db/error', { key: 'aaa', value: iter })
+      assert.equal(rt, 'error')
+      await this.afterAll(async () => {
+        let rt = await tester.get('test/db/getRows')
+        assert.equal(rt, 0)
+      })
+    })
 
-  //   its_par(N, 'throw (db)', async function () {
-  //     await this.beforeAll(clearTable)
-  //     let iter = this.iteration
-  //     let rt = await tester.request('test/db/throw', { key: 'aaa', value: iter })
-  //     assert.equal(rt.status, -1)
-  //     await this.afterAll(async () => {
-  //       let rt = await tester.call('test/db/getRows')
-  //       assert.equal(rt, 0)
-  //     })
-  //   })
-  // })
+    its_par(N, 'throw (db)', async function () {
+      await this.beforeAll(clearTable)
+      let iter = this.iteration
+      let isThrow = false
+      let rt = await tester.request('post', 'test/db/throw').catch(() => {
+        isThrow = true
+      })
+      assert.isTrue(isThrow)
+      await this.afterAll(async () => {
+        let rt = await tester.get('test/db/getRows')
+        assert.equal(rt, 0)
+      })
+    })
+  })
 
-  // describe('db sequence', function () {
-  //   its_seq(N, 'succeed (db)', async function () {
-  //     await this.beforeAll(clearTable)
-  //     let iter = this.iteration
-  //     let rt = await tester.request('test/db/succeed', { key: 'aaa', value: iter })
-  //     assert.deepEqual(rt, { status: 1, data: 'succeed' })
-  //     await this.afterAll(async () => {
-  //       let rt = await tester.call('test/db/getRows')
-  //       assert.equal(rt, N)
-  //     })
-  //   })
+  describe('db sequence', function () {
+    its_seq(N, 'succeed (db)', async function () {
+      await this.beforeAll(clearTable)
+      let iter = this.iteration
+      let rt = await tester.get('test/db/succeed', { key: 'aaa', value: iter })
+      assert.deepEqual(rt, 'succeed')
+      await this.afterAll(async () => {
+        let rt = await tester.get('test/db/getRows')
+        assert.equal(rt, N)
+      })
+    })
 
-  //   its_seq(N, 'failed (db)', async function () {
-  //     await this.beforeAll(clearTable)
-  //     let iter = this.iteration
-  //     let rt = await tester.request('test/db/failed', { key: 'aaa', value: iter })
-  //     assert.deepEqual(rt, { status: 0, msg: 'failed' })
-  //     await this.afterAll(async () => {
-  //       let rt = await tester.call('test/db/getRows')
-  //       assert.equal(rt, N)
-  //     })
-  //   })
+    its_seq(N, 'failed (db)', async function () {
+      await this.beforeAll(clearTable)
+      let iter = this.iteration
+      let rt = await tester.get('test/db/failed', { key: 'aaa', value: iter })
+      assert.deepEqual(rt, 'failed')
+      await this.afterAll(async () => {
+        let rt = await tester.get('test/db/getRows')
+        assert.equal(rt, N)
+      })
+    })
 
-  //   its_seq(N, 'error (db)', async function () {
-  //     await this.beforeAll(clearTable)
-  //     let iter = this.iteration
-  //     let rt = await tester.request('test/db/error', { key: 'aaa', value: iter })
-  //     assert.equal(rt.status, -2)
-  //     await this.afterAll(async () => {
-  //       let rt = await tester.call('test/db/getRows')
-  //       assert.equal(rt, 0)
-  //     })
-  //   })
+    its_seq(N, 'error (db)', async function () {
+      await this.beforeAll(clearTable)
+      let iter = this.iteration
+      let rt = await tester.get('test/db/error', { key: 'aaa', value: iter })
+      assert.equal(rt, 'error')
+      await this.afterAll(async () => {
+        let rt = await tester.get('test/db/getRows')
+        assert.equal(rt, 0)
+      })
+    })
 
-  //   its_seq(N, 'throw (db)', async function () {
-  //     await this.beforeAll(clearTable)
-  //     let iter = this.iteration
-  //     let rt = await tester.request('test/db/throw', { key: 'aaa', value: iter })
-  //     assert.equal(rt.status, -1)
-  //     await this.afterAll(async () => {
-  //       let rt = await tester.call('test/db/getRows')
-  //       assert.equal(rt, 0)
-  //     })
-  //   })
-  // })
+    its_seq(N, 'throw (db)', async function () {
+      await this.beforeAll(clearTable)
+      let iter = this.iteration
+      let isThrow = false
+      let rt = await tester.request('post', 'test/db/throw').catch(() => {
+        isThrow = true
+      })
+      await this.afterAll(async () => {
+        let rt = await tester.get('test/db/getRows')
+        assert.equal(rt, 0)
+      })
+    })
+  })
 })

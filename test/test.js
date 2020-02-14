@@ -30,6 +30,7 @@ describe('theone', function () {
     })
   })
   require('./tester_test')
+  require('./server_test')
 
   describe('shut down', function () {
     //等一下服务器完成启动才能关闭服务器

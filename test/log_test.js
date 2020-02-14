@@ -3,8 +3,8 @@
 const log = require('../lib/log')
 const { its } = require('zo-mocha-ext')
 
-describe('log', function() {
-  it('easy config - stdout', async function() {
+describe('log', function () {
+  it('easy config - stdout', async function () {
     log.init({
       'level': 'INFO',
       'type': 'stdout'
@@ -21,7 +21,7 @@ describe('log', function() {
     await log.shutdown()
   })
 
-  its(10, 'easy config - stdout', async function() {
+  its(10, 'easy config - stdout', async function () {
     this.beforeAll(() => {
       this.timeout(5000)
       this.slow(5000)
@@ -51,7 +51,7 @@ describe('log', function() {
     })
   })
 
-  its(3, 'pm2', async function() {
+  its(3, 'pm2', async function () {
     process.env.pm_id = '' + this.iteration
     log.init({
       'level': 'info',

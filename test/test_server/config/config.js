@@ -24,7 +24,8 @@ module.exports = {
     'multiVersion': true,
   }, {
     'name': 'admin',
-    'autoTransaction': false
+    'autoTransaction': false,
+    'internalModel': true
   }],
 
   'log': {
