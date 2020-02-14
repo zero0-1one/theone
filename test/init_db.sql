@@ -12,7 +12,7 @@ CREATE DATABASE IF NOT EXISTS `theone_log_test`;
 CREATE USER 'theone_tester'@'localhost' IDENTIFIED BY '12345';
 GRANT ALL PRIVILEGES ON `theone_test`.* TO 'theone_tester'@'localhost';
 GRANT ALL PRIVILEGES ON `theone_log_test`.* TO 'theone_tester'@'localhost';
-
+FLUSH PRIVILEGES;
 
 
 

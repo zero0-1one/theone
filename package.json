@@ -20,13 +20,13 @@
   "dependencies": {
     "@captemulation/get-parameter-names": "^1.2.0",
     "compare-versions": "^3.4.0",
-    "koa": "^2.6.2",
+    "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
     "koa-compose": "^4.1.0",
     "koa-session": "^5.11.0",
     "koa-static": "^5.0.0",
     "log4js": "^6.1.1",
-    "mysql2": "^1.6.4",
+    "mysql2": "^2.1.0",
     "zo-tail-f": "^1.0.4"
   },
   "devDependencies": {
