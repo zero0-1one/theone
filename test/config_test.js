@@ -13,8 +13,14 @@ const userConfig = {
     'connectionLimit': 10,
   },
   'modules': [
-    { 'name': 'api', 'mainDb': 'db' },
-    { 'name': 'admin', 'mainDb': 'db' },
+    {
+      'name': 'api',
+      'database': 'db'
+    },
+    {
+      'name': 'admin',
+      'database': 'db'
+    },
   ],
   'root_a': 1,
   'root_b': [
@@ -58,6 +64,7 @@ describe('config', function () {
     cfg['database'] = [cfg['database']]
     cfg['modules'][0] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][0])
     cfg['modules'][1] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][1])
+    cfg['modules'][0].database = cfg['modules'][1].database = [cfg['databaseMap']['db']]
     cfg['log']['file']['filename'] = './runtime/logs/' + data['appName'] + '.log'
     cfg['cache']['dir'] = './runtime/cache/'
     assert.deepEqual(data, cfg)
