@@ -15,11 +15,13 @@ const userConfig = {
   'modules': [
     {
       'name': 'api',
-      'database': 'db'
+      'database': 'db',
+      "mainDb": "db"
     },
     {
       'name': 'admin',
-      'database': 'db'
+      'database': 'db',
+      "mainDb": "db"
     },
   ],
   'root_a': 1,

@@ -8,8 +8,8 @@ module.exports = {
     'connectionLimit': 10,
   },
   'modules': [
-    { 'name': 'api', 'database': 'db' },
-    { 'name': 'admin', 'database': 'db' },
+    { 'name': 'api', 'database': 'db', 'mainDb': 'db' },
+    { 'name': 'admin', 'database': 'db', 'mainDb': 'db' },
   ],
   'root_a': 1,
   'root_b': [
