@@ -8,8 +8,7 @@ const { its_par } = require('zo-mocha-ext')
 
 const options = {
   'dir': './test/test_cache/',
-  'timeout': 1,
-  'gcInterval': 2
+  'timeout': 1
 }
 
 describe('cache', function() {
