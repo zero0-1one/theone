@@ -67,9 +67,9 @@ module.exports.pathNormalize = function (p) {
 }
 
 module.exports.create = async function (environment = {}, init = () => { }) {
-  if (initWaiting) {
-    throw new Error('Theone server has been initialized')
-  }
+  if (initWaiting) throw new Error('Theone server has been initialized')
+  if (environment.ENV_NAME == 'common') throw new Error('"common" is a reserved word and cannot be used as a ENV_NAME')
+  
   initWaiting = toUtil.createWaiting()
   Object.freeze(Object.assign(this.env, defEnvironment, environment))
   global['theone'] = this //始终有 theone 全局对象
