@@ -17,7 +17,7 @@ describe('controller', function () {
     expect(data['c'].actions['c_4'].params).to.be.like([{ name: 'x' }, { name: 'y', type: 'Number' , hasDefault:true}])
   })
 
-  it('loadModule', function () {undif
+  it('loadModule', function () {
     let modulePath = path.join(__dirname + '/test_api/v1.0')
     let data = controller.loadModule(modulePath, '', 'Action')
     let expectation = [
