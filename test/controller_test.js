@@ -14,10 +14,10 @@ describe('controller', function () {
     let filePath = path.join(__dirname + '/test_api/v1.0/c.js')
     let data = controller.loadController(filePath, 'Action', 'c/')
     expect(data['c'].actions['c_2'].params).to.be.like([{ name: 'a' }, { name: 'b' }])
-    expect(data['c'].actions['c_4'].params).to.be.like([{ name: 'x' }, { name: 'y', type: 'Number' }])
+    expect(data['c'].actions['c_4'].params).to.be.like([{ name: 'x' }, { name: 'y', type: 'Number' , hasDefault:true}])
   })
 
-  it('loadModule', function () {
+  it('loadModule', function () {undif
     let modulePath = path.join(__dirname + '/test_api/v1.0')
     let data = controller.loadModule(modulePath, '', 'Action')
     let expectation = [
@@ -27,7 +27,7 @@ describe('controller', function () {
     ]
     assert.hasAllKeys(data, expectation)
     expect(data['c'].actions['c_2'].params).to.be.like([{ name: 'a' }, { name: 'b' }])
-    expect(data['c'].actions['c_4'].params).to.be.like([{ name: 'x' }, { name: 'y', type: 'Number' }])
+    expect(data['c'].actions['c_4'].params).to.be.like([{ name: 'x' }, { name: 'y', type: 'Number', hasDefault:true}])
   })
 
   it('loadVersions', function () {
