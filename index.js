@@ -16,6 +16,9 @@ const defEnvironment = {
   //决定多配置表使用哪一个
   ENV_NAME: '',
 
+  //是否启用在Action参数 类型标记语法中启用 'Int' 变量类型， 如果启用会引入一个全局变量 'Int'
+  USE_INT: true,
+
   //可以提供一个额外的命名空间, 会创建一个 require('zo-theone') 引用的全局变量.
   NAMESPACE: 'theone',
   //是否锁定 global变量,  true:禁止添加全局变量,  如果为数组则指定允许的全局变量
@@ -69,13 +72,17 @@ module.exports.pathNormalize = function (p) {
 module.exports.create = async function (environment = {}, init = () => { }) {
   if (initWaiting) throw new Error('Theone server has been initialized')
   if (environment.ENV_NAME == 'common') throw new Error('"common" is a reserved word and cannot be used as a ENV_NAME')
-  
+
   initWaiting = toUtil.createWaiting()
   Object.freeze(Object.assign(this.env, defEnvironment, environment))
   global['theone'] = this //始终有 theone 全局对象
   if (typeof this.env.NAMESPACE == 'string' && this.env.NAMESPACE != 'theone') {
     global[this.env.NAMESPACE] = this
   }
+
+  if (this.env.USE_INT && global['Int'] === undefined) global['Int'] = 'Int type' //定义一个名为 Int 的全局变量来支持 action 参数指定 Int 类型
+
+  // GLOBAL_LOCK: ['wordLib'],
   if (this.env.GLOBAL_LOCK) {
     require('./lib/global_lock')(this.env.GLOBAL_LOCK)
   }

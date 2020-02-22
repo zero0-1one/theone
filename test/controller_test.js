@@ -1,8 +1,11 @@
 'use strict'
 
-const assert = require('chai').assert
+const chai = require('chai')
+const assert = chai.assert
+const expect = chai.expect
 const path = require('path')
 const controller = require('../lib/controller')
+chai.use(require('chai-like'))
 
 
 
@@ -10,8 +13,8 @@ describe('controller', function () {
   it('loadController', function () {
     let filePath = path.join(__dirname + '/test_api/v1.0/c.js')
     let data = controller.loadController(filePath, 'Action', 'c/')
-    assert.deepEqual(data['c'].actions['c_2'].params, ['a', 'b'])
-    assert.deepEqual(data['c'].actions['c_4'].params, ['x', 'y'])
+    expect(data['c'].actions['c_2'].params).to.be.like([{ name: 'a' }, { name: 'b' }])
+    expect(data['c'].actions['c_4'].params).to.be.like([{ name: 'x' }, { name: 'y', type: 'Number' }])
   })
 
   it('loadModule', function () {
@@ -23,8 +26,8 @@ describe('controller', function () {
       'b/b1', 'b/bb/bb1', 'b/bb/bb2',
     ]
     assert.hasAllKeys(data, expectation)
-    assert.deepEqual(data['c'].actions['c_2'].params, ['a', 'b'])
-    assert.deepEqual(data['c'].actions['c_4'].params, ['x', 'y'])
+    expect(data['c'].actions['c_2'].params).to.be.like([{ name: 'a' }, { name: 'b' }])
+    expect(data['c'].actions['c_4'].params).to.be.like([{ name: 'x' }, { name: 'y', type: 'Number' }])
   })
 
   it('loadVersions', function () {
