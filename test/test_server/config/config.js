@@ -22,6 +22,7 @@ module.exports = {
   'modules': [{
     'name': 'api',
     'multiVersion': true,
+    'middleware': ['midB'],
   }, {
     'name': 'admin',
     'autoTransaction': false,

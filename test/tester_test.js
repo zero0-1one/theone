@@ -17,7 +17,7 @@ describe('tester', function () {
   it('getCallMid', async function () {
     await tester.get('account/login/getCallMid')
     let rt = await tester.get('account/login/getCallMid')
-    assert.deepEqual(rt, ['midA', 'midC'])
+    assert.deepEqual(rt, ['midB', 'midA', 'midC'])
   })
 
 
