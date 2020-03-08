@@ -32,5 +32,16 @@ module.exports = {
   'log': {
     'type': 'file',
     'sqlLog': true
+  },
+
+  'jwt': {
+    'enabled': true,
+    'passthrough': true,
+    'secret': 'asdfasdasdfas'
+  },
+
+  'session': {
+    'enabled': true,
+    'keys': ['adsfasdfahd#gfbn$', 'cads#@sdfadfv']
   }
 }

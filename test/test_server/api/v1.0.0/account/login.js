@@ -5,28 +5,37 @@ module.exports = class {
     return ['midA', 'midC']
   }
 
-  loginByEmailAction(email, password) {
+  loginByEmail_Action(email, password) {
     if (password.length < 5) {
       throw new Error('password is too short :' + password)
     }
     return [email, password]
   }
 
-  loginByPhoneAction(phone, password) {
+  loginByPhone_Action(phone, password) {
     return [phone, password]
   }
 
-  setSessionAction(data) {
+  setSession_Action(data) {
     this.ctx.session.data = data
     return data
   }
 
 
-  getSessionAction() {
+  getSession_Action() {
     return this.ctx.session.data
   }
 
-  getCallMidAction() {
+  createToken_Action(data) {
+    return this.sign({ data })
+  }
+
+
+  getToken_Action() {
+    return this.ctx.state.user
+  }
+
+  getCallMid_Action() {
     return this.callMid
   }
 }

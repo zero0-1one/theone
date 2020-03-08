@@ -14,25 +14,35 @@ const N = 1
 
 describe('tester', function () {
 
-  it('getCallMid', async function () {
-    await tester.get('account/login/getCallMid')
-    let rt = await tester.get('account/login/getCallMid')
-    assert.deepEqual(rt, ['midB', 'midA', 'midC'])
+  // it('getCallMid', async function () {
+  //   await tester.get('account/login/getCallMid')
+  //   let rt = await tester.get('account/login/getCallMid')
+  //   assert.deepEqual(rt, ['midB', 'midA', 'midC'])
+  // })
+
+
+  // its_par(N, 'request', async function () {
+  //   let rt = await tester.get('account/login/loginByPhone', { phone: '123456', password: 'abcdef' })
+  //   assert.deepEqual(rt, ['123456', 'abcdef'])
+  // })
+
+
+  // it('set and get session', async function () {
+  //   await tester.get('account/login/setSession', { data: 123 })
+  //   await tester.get('account/login/setSession', { data: 234 })
+  //   let rt = await tester.get('account/login/getSession')
+  //   assert.deepEqual(rt, 234)
+  // })
+
+
+  it('set and get token', async function () {
+    await tester.get('account/login/createToken', { data: 123 })
+    let token = await tester.get('account/login/createToken', { data: 234 })
+    let rt = await tester.get('account/login/getToken', {}, { authorization: 'Bearer ' + token })
+    assert.deepEqual(rt.data, 234)
   })
+  return
 
-
-  its_par(N, 'request', async function () {
-    let rt = await tester.get('account/login/loginByPhone', { phone: '123456', password: 'abcdef' })
-    assert.deepEqual(rt, ['123456', 'abcdef'])
-  })
-
-
-  it('set and get session', async function () {
-    await tester.get('account/login/setSession', { data: 123 })
-    await tester.get('account/login/setSession', { data: 234 })
-    let rt = await tester.get('account/login/getSession')
-    assert.deepEqual(rt, 234)
-  })
 
   describe('nodb parallel', function () {
 

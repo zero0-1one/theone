@@ -25,7 +25,6 @@ describe('theone', function () {
         DEBUG: true
       }
       app = await theone.create(env)
-      app.koa.keys = ['adsfasdfahd#gfbn$', 'cads#@sdfadfv']
       app.runHttp()
     })
   })

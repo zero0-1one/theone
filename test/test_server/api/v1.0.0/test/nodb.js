@@ -1,21 +1,21 @@
 'use strict'
 
 module.exports = class {
-  succeedAction() {
+  succeed_Action() {
     return 'succeed'
   }
 
-  failedAction() {
+  failed_Action() {
     console.log('failedAction')
     return this.failed('failed')
   }
 
-  errorAction() {
+  error_Action() {
     return this.error('error')
   }
 
 
-  throwAction() {
+  throw_Action() {
     throw new Error('error')
   }
 }
