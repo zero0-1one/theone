@@ -9,6 +9,7 @@ const App = require('./lib/app')
 const Tester = require('./lib/tester')
 const Response = require('./lib/response')
 const path = require('path')
+
 /*
   默认环境 (环境属性是比config的属性更基础, 启动服务器最初需要的属性, 如 config的路径等)
 */
@@ -23,6 +24,8 @@ const defEnvironment = {
   NAMESPACE: 'theone',
   //是否锁定 global变量,  true:禁止添加全局变量,  如果为数组则指定允许的全局变量
   GLOBAL_LOCK: true,
+  //禁用 eval 方法
+  DISABLE_EVAL: true,
 
   //绝对路径 默认当前工作目录 其他相当 ROOT_DIR 的相当路径可以使用 theone.path( other) 获取绝对路径
   ROOT_DIR: process.cwd(),
@@ -81,6 +84,11 @@ module.exports.create = async function (environment = {}, init = () => { }) {
   }
 
   if (this.env.USE_INT && global['Int'] === undefined) global['Int'] = 'Int type' //定义一个名为 Int 的全局变量来支持 action 参数指定 Int 类型
+
+  if (this.env.DISABLE_EVAL) {
+    delete global['eval']
+    // delete global['Function']   //暂时还没有很好的方法禁用 new Function
+  }
 
   // GLOBAL_LOCK: ['wordLib'],
   if (this.env.GLOBAL_LOCK) {

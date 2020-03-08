@@ -34,7 +34,9 @@
     "no-this-before-super": "warn",
     "no-unreachable": "warn",
     "constructor-super": "warn",
-    "valid-typeof": "warn"
+    "valid-typeof": "warn",
+    "no-new-func": "error",
+    "no-eval": "error"
   },
   "globals": {
     "theone": true
