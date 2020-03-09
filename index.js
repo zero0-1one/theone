@@ -47,7 +47,6 @@ const defEnvironment = {
   DEBUG: true
 }
 
-let theoneApp = undefined
 let initWaiting = undefined
 
 //通常 theone 的属性都需要在 create() 之后才能正常使用
@@ -104,22 +103,23 @@ module.exports.create = async function (environment = {}, init = () => { }) {
   this.engine = new engine()
   await this.engine.start()
   await init()
-  theoneApp = new App()
+  theone.app = new App()
   initWaiting.resolve()
-  return theoneApp
+  theone.app = theone.app
+  return theone.app
 }
 
 module.exports.shutdown = async function () {
-  if (!theoneApp) {
+  if (!theone.app) {
     return
   }
   await this.initWaiting
-  await theoneApp.close()
+  await theone.app.close()
   await Db.close()
   await log.shutdown()
   await this.engine.close()
   await cache.close()
-  theoneApp = undefined
+  theone.app = undefined
   this.initWaiting = undefined
   this.config = {}
   this.env = {}

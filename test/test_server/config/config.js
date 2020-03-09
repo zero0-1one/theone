@@ -34,6 +34,8 @@ module.exports = {
     'sqlLog': true
   },
 
+  'keys': ['adsfasdfahd#gfbn$', 'cads#@sdfadfv'],
+
   'jwt': {
     'enabled': true,
     'passthrough': true,
@@ -42,6 +44,5 @@ module.exports = {
 
   'session': {
     'enabled': true,
-    'keys': ['adsfasdfahd#gfbn$', 'cads#@sdfadfv']
   }
 }

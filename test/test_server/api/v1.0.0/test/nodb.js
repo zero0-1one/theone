@@ -18,4 +18,20 @@ module.exports = class {
   throw_Action() {
     throw new Error('error')
   }
+
+  paramInt_Action(arg = Int) {
+    return arg
+  }
+
+  paramString_Action(arg = String) {
+    return arg
+  }
+
+  paramBoolean_Action(arg = Boolean) {
+    return arg
+  }
+
+  paramDate_Action(arg = Date) {
+    return arg
+  }
 }
