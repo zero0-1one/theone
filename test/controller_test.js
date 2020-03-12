@@ -31,7 +31,7 @@ describe('controller', function () {
   })
 
   it('loadVersions', function () {
-    let data = controller.loadVersions(path.join(__dirname + '/test_api'), '', 'Action')
+    let data = controller.loadVersions(path.join(__dirname + '/test_api'), '', { 'actionSuffix': 'Action' })
     assert.hasAllKeys(data, ['v1.0', 'v1.1'])
     let expectation0 = [
       'c',
@@ -40,6 +40,45 @@ describe('controller', function () {
     ]
     let expectation1 = ['a/a1', 'a/a2']
     assert.hasAllKeys(data['v1.0'], expectation0)
+    assert.hasAllKeys(data['v1.1'], expectation1)
+
+    assert.hasAllKeys(data['v1.0']['a/aa/aaa/aaa1'].actions, ['aaa1_2', 'aaa1_4'])
+  })
+
+  it('loadVersions min-max', function () {
+    let data = controller.loadVersions(path.join(__dirname + '/test_api'), '', { 'multiVersion': ['v1.0', 'v1.0'], 'actionSuffix': 'Action' })
+    assert.hasAllKeys(data, ['v1.0'])
+    let expectation0 = [
+      'c',
+      'a/a1', 'a/a2', 'a/aa/aa1', 'a/aa/aa2', 'a/aa/aaa/aaa1',
+      'b/b1', 'b/bb/bb1', 'b/bb/bb2',
+    ]
+    assert.hasAllKeys(data['v1.0'], expectation0)
+  })
+
+
+  it('loadVersions min-max 2', function () {
+    let data = controller.loadVersions(path.join(__dirname + '/test_api'), '', { 'multiVersion': ['v1.1', 'v1.1'], 'actionSuffix': 'Action' })
+    assert.hasAllKeys(data, ['v1.1'])
+    let expectation1 = ['a/a1', 'a/a2']
+    assert.hasAllKeys(data['v1.1'], expectation1)
+  })
+
+  it('loadVersions min:null', function () {
+    let data = controller.loadVersions(path.join(__dirname + '/test_api'), '', { 'multiVersion': [null, 'v1.0'], 'actionSuffix': 'Action' })
+    assert.hasAllKeys(data, ['v1.0'])
+    let expectation0 = [
+      'c',
+      'a/a1', 'a/a2', 'a/aa/aa1', 'a/aa/aa2', 'a/aa/aaa/aaa1',
+      'b/b1', 'b/bb/bb1', 'b/bb/bb2',
+    ]
+    assert.hasAllKeys(data['v1.0'], expectation0)
+  })
+
+  it('loadVersions max:null', function () {
+    let data = controller.loadVersions(path.join(__dirname + '/test_api'), '', { 'multiVersion': ['v1.1', null], 'actionSuffix': 'Action' })
+    assert.hasAllKeys(data, ['v1.1'])
+    let expectation1 = ['a/a1', 'a/a2']
     assert.hasAllKeys(data['v1.1'], expectation1)
   })
 

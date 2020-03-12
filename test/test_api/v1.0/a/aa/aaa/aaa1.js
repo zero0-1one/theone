@@ -16,4 +16,8 @@ module.exports = class{
     return 4
   }
 
+  aaa1_5ActionA() {
+    return 4
+  }
+
 }

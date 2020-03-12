@@ -1,5 +1,5 @@
 'use strict'
-
+const API = require('zo-theone-api')
 let theone = require('..')
 const path = require('path')
 

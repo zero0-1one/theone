@@ -37,7 +37,8 @@
     "chai-like": "^1.1.1",
     "mocha": "^5.2.0",
     "nyc": "^15.0.0",
-    "zo-mocha-ext": "^1.0.3"
+    "zo-mocha-ext": "^1.0.3",
+    "zo-theone-api": "^1.0.2"
   },
   "author": "zero0-1one",
   "license": "MIT",
