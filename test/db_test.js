@@ -239,40 +239,10 @@ describe('db', function () {
     })
   })
 
-  it('undefinedAsNull', async function () {
-    await clearTable()
-    await safeCall(async db => {
-      let isThrow = false
-      await db.execute('INSERT INTO test_table VALUES(?,?,?)', [undefined, 'a', 1]).catch(e => {
-        isThrow = true
-      })
-      assert.isTrue(isThrow)
-
-      isThrow = false
-      await db.execute('INSERT INTO test_table VALUES(?,?,?)', [undefined, 'a', 1], { undefinedAsNull: true }).catch(e => {
-        isThrow = true
-      })
-      assert.isFalse(isThrow)
-
-      await db.execute('INSERT INTO test_table VALUES({?,?,?}...)', [[undefined, 'a', 1]], { undefinedAsNull: true }).catch(e => {
-        isThrow = true
-      })
-      assert.isFalse(isThrow)
 
 
-      await db.execute('INSERT INTO test_table VALUES({?},...)', [[[undefined], ['a'], [1]]], { undefinedAsNull: true }).catch(e => {
-        isThrow = true
-      })
-      assert.isFalse(isThrow)
-
-      let rt = await db.executeOne('SELECT COUNT(*) n FROM test_table')
-      assert.equal(rt.n, 3)
-    })
-  })
-
-
-  // 不close 测试用例不会退出 istanbul/nyc 也就无法统计覆盖了
-  it('close', async function () {
-    await Db.close()
-  })
+  //不close 测试用例不会退出 istanbul/nyc 也就无法统计覆盖了
+  // it('close', async function() {
+  //   await Db.close()
+  // })
 })
