@@ -1,5 +1,4 @@
 'use strict'
-const API = require('zo-theone-api')
 let theone = require('..')
 const path = require('path')
 
@@ -28,7 +27,7 @@ describe('theone', function () {
       app.runHttp()
     })
   })
-  require('./tester_test')
+  require('./request_test')
   require('./server_test')
 
   describe('shut down', function () {

@@ -6,7 +6,6 @@ const Db = require('./lib/db')
 const log = require('./lib/log')
 const cache = require('./lib/cache')
 const App = require('./lib/app')
-const Tester = require('./lib/tester')
 const Response = require('./lib/response')
 const path = require('path')
 
@@ -56,7 +55,6 @@ module.exports.log = log
 module.exports.cache = cache
 module.exports.config = {}
 module.exports.env = {}
-module.exports.Tester = Tester
 module.exports.Response = Response
 
 module.exports.path = function (...paths) {

@@ -1,10 +1,9 @@
 'use strict'
-
-const Tester = require('../lib/tester')
+const Client = require('./client')
 const assert = require('chai').assert
 
-let api = new Tester('http://localhost:18510', 'api', 'v1.0.0')
-let admin = new Tester('http://localhost:18510', 'admin')
+let api = new Client('v1.0.0', 'api')
+let admin = new Client(null, 'admin')
 
 describe('server test', function () {
     describe('app', function () {
