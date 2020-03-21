@@ -22,7 +22,7 @@ module.exports = {
   'modules': [{
     'name': 'api',
     'multiVersion': true,
-    'middleware': ['midB'],
+    'middleware': ['midB', { name: 'midC', unless: ctrlName => ctrlName != 'hasMidC' }],
   }, {
     'name': 'admin',
     'autoTransaction': false,
