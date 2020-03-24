@@ -5,3 +5,4 @@ module.exports = class {
         return 'internal'
     }
 }
+

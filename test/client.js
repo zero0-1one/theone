@@ -11,9 +11,9 @@ module.exports = class TestClient {
       request: 'request',
       hooks: {
         async results({ error, res }) {
-          if (error) throw new Error('请求异常' + error)
+          if (error) return new Error('请求异常' + error)
           if (res.statusCode == 200) return res.data
-          throw new Error('请求错误  statusCode:' + res.statusCode)
+          return new Error('请求错误  statusCode:' + res.statusCode)
         }
       }
     })

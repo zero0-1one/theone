@@ -31,7 +31,7 @@ module.exports = {
 
   'log': {
     'type': 'file',
-    'sqlLog': true
+    'sqlLog': false
   },
 
   'keys': ['adsfasdfahd#gfbn$', 'cads#@sdfadfv'],

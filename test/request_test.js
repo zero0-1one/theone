@@ -60,11 +60,8 @@ describe('request_test', function () {
     })
 
     its_par(N, 'throw (nodb)', async function () {
-      let isThrow = false
-      let rt = await client.post('test/nodb/throw').catch(() => {
-        isThrow = true
-      })
-      assert.isTrue(isThrow)
+      let rt = await client.post('test/nodb/throw')
+      assert.instanceOf(rt, Error)
     })
   })
 
@@ -104,12 +101,8 @@ describe('request_test', function () {
 
     its_par(N, 'throw (db)', async function () {
       await this.beforeAll(clearTable)
-      let iter = this.iteration
-      let isThrow = false
-      let rt = await client.post('test/db/throw').catch(() => {
-        isThrow = true
-      })
-      assert.isTrue(isThrow)
+      let rt = await client.post('test/db/throw')
+      assert.instanceOf(rt, Error)
       await this.afterAll(async () => {
         let rt = await client.get('test/db/getRows')
         assert.equal(rt, 0)

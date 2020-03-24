@@ -61,7 +61,8 @@ module.exports.path = function (...paths) {
   return path.join(this.env.ROOT_DIR, ...paths)
 }
 
-module.exports.pathNormalize = function (p) {
+module.exports.pathNormalize = function (...paths) {
+  let p = path.join(...paths)
   if (path.isAbsolute(p)) {
     return path.normalize(p)
   } else {
@@ -83,6 +84,7 @@ module.exports.create = async function (environment = {}, init = () => { }) {
   if (this.env.USE_INT && global['Int'] === undefined) global['Int'] = 'Int type' //定义一个名为 Int 的全局变量来支持 action 参数指定 Int 类型
 
   if (this.env.DISABLE_EVAL) {
+    // eslint-disable-next-line no-eval
     delete global['eval']
     // delete global['Function']   //暂时还没有很好的方法禁用 new Function
   }

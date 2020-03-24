@@ -34,4 +34,45 @@ module.exports = class {
   paramDate_Action(arg = Date) {
     return arg
   }
+
+  injectAfter_Action(arg) {
+    let dbCtrl = this.ctrl('test/db')
+    let data = {}
+    for (const key in arg) {
+      this.inject(key, arg[key])
+      data[key] = dbCtrl[key]
+    }
+    return data
+  }
+
+  injectBefore_Action(arg) {
+    for (const key in arg) {
+      this.inject(key, arg[key])
+    }
+    let dbCtrl = this.ctrl('test/db')
+    let data = {}
+    for (const key in arg) {
+      data[key] = dbCtrl[key]
+    }
+    return data
+  }
+
+  injectMixed_Action(after, before) {
+    for (const key in before) {
+      this.inject(key, before[key])
+    }
+    let dbCtrl = this.ctrl('test/db')
+    for (const key in after) {
+      dbCtrl.inject(key, after[key])
+    }
+
+    let data = { after: {}, before: {} }
+    for (const key in after) {
+      data.after[key] = this[key]
+    }
+    for (const key in before) {
+      data.before[key] = dbCtrl[key]
+    }
+    return data
+  }
 }
