@@ -34,19 +34,26 @@ describe('util', function () {
   })
 
 
-  it('lock', async function () {
+  it('doOrder', async function () {
     let tasks = []
+    let owner = {}
+    let results = []
     tasks.push(
-      toUtil.lock('a', async () => {
+      toUtil.doOrder('a', owner, async () => {
+        results.push(1)
         await toUtil.sleep(1000)
+        results.push(2)
       })
     )
     tasks.push(
-      toUtil.lock('a', async () => {
+      toUtil.doOrder('a', owner, async () => {
+        results.push(3)
         await toUtil.sleep(1000)
+        results.push(4)
       })
     )
     await Promise.all(tasks)
+    assert.deepEqual(results, [1, 2, 3, 4])
   })
 
   it('passwordHash, passwordVerify', function () {

@@ -1,6 +1,5 @@
 'use strict'
 const Client = require('zo-theone-client')
-
 module.exports = class TestClient {
   constructor(version, moduleName) {
     let url = 'http://localhost:18510/'

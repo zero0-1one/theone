@@ -4,7 +4,8 @@ const toUtil = require('./lib/util')
 const config = require('./lib/config')
 const Db = require('./lib/db')
 const log = require('./lib/log')
-const cache = require('./lib/cache')
+const Cache = require('./lib/cache')
+const fileCache = require('./lib/cacheAdapter/file')
 const App = require('./lib/app')
 const Response = require('./lib/response')
 const path = require('path')
@@ -34,15 +35,6 @@ const defEnvironment = {
   //可以指定自己的 Db类, 但必须继承至 require('theone-server').Db
   DB_CLASS: Db,
 
-  //可以指定自己的 CACHER 对象(默认使用内置的 fileCacher),
-  //需要拥有 init, clear, get, set, gc 方法, 原型如下:
-  // init(isExpired)
-  // async clear(name)
-  // async get(name)
-  // async set(name, data)
-  // async gc(isExpired)
-  CACHER: cache.fileCacher,
-
   DEBUG: true
 }
 
@@ -52,10 +44,27 @@ let initWaiting = undefined
 module.exports.Db = Db
 module.exports.util = toUtil
 module.exports.log = log
-module.exports.cache = cache
 module.exports.config = {}
 module.exports.env = {}
 module.exports.Response = Response
+
+let caches = {} //存储通过字符串创建的 cache, 或 options 中有 name 属性的
+module.exports.getCache = function (options, tag) {
+  let name = ''
+  if (typeof options == 'string') {
+    name = options
+    options = theone.config['cache']['adapter'][name]
+  }
+  if (name) {
+    if (!caches.hasOwnProperty(name)) {
+      caches[name] = new Cache(options)
+    }
+    return tag ? caches[name].tag(tag) : caches[name]
+  } else {
+    let cache = new Cache(options)
+    return tag ? cache.tag(tag) : cache
+  }
+}
 
 module.exports.path = function (...paths) {
   return path.join(this.env.ROOT_DIR, ...paths)
@@ -97,7 +106,8 @@ module.exports.create = async function (environment = {}, init = () => { }) {
   let cfg = config.load(this.path(this.env.CONFIG_DIR), this.env.ENV_NAME)
   toUtil.deepFreeze(Object.assign(this.config, cfg))
   log.init(this.config['log'], this.env.ROOT_DIR)
-  cache.init(this.config['cache'], this.env.ROOT_DIR, log.error, this.env.CACHER)
+
+  theone.cache = theone.getCache(this.config['cache']['default'])
 
   let engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
   this.engine = new engine()
@@ -110,9 +120,8 @@ module.exports.create = async function (environment = {}, init = () => { }) {
 }
 
 module.exports.shutdown = async function () {
-  if (!theone.app) {
-    return
-  }
+  if (!theone.app) return
+
   await this.initWaiting
   await theone.app.close()
   await Db.close()
