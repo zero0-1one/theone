@@ -5,7 +5,6 @@ const config = require('./lib/config')
 const Db = require('./lib/db')
 const log = require('./lib/log')
 const Cache = require('./lib/cache')
-const fileCache = require('./lib/cacheAdapter/file')
 const App = require('./lib/app')
 const Response = require('./lib/response')
 const path = require('path')
@@ -61,11 +60,11 @@ module.exports.getCache = function (options, tag) {
   }
   if (name) {
     if (!caches.hasOwnProperty(name)) {
-      caches[name] = new Cache(options)
+      caches[name] = Cache.createWrap(new Cache(options))
     }
     return tag ? caches[name].tag(tag) : caches[name]
   } else {
-    let cache = new Cache(options)
+    let cache = Cache.createWrap(new Cache(options))
     return tag ? cache.tag(tag) : cache
   }
 }
