@@ -68,7 +68,7 @@ describe('config', function () {
     cfg['modules'][1] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][1])
     cfg['modules'][0].database = cfg['modules'][1].database = [cfg['databaseMap']['db']]
     cfg['log']['file']['filename'] = './runtime/logs/' + data['appName'] + '.log'
-    cfg['cache']['dir'] = './runtime/cache/'
+    cfg['cache']['adapter']['file']['dir'] = './runtime/cache/'
     assert.deepEqual(data, cfg)
   })
 })

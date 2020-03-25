@@ -43,7 +43,6 @@ describe('request_test', function () {
 
 
   describe('nodb parallel', function () {
-
     its_par(N, 'succeed (nodb)', async function () {
       let rt = await client.get('test/nodb/succeed')
       assert.deepEqual(rt, 'succeed')

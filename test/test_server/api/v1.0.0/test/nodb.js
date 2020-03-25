@@ -6,7 +6,6 @@ module.exports = class {
   }
 
   failed_Action() {
-    console.log('failedAction')
     return this.failed('failed')
   }
 

@@ -54,6 +54,10 @@ module.exports.getCache = function (options, tag) {
   if (typeof options == 'string') {
     name = options
     options = theone.config['cache']['adapter'][name]
+    if (name == 'file') {
+      options = Object.assign({}, options)
+      options['dir'] = theone.path(options['dir'])
+    }
   }
   if (name) {
     if (!caches.hasOwnProperty(name)) {
@@ -127,7 +131,10 @@ module.exports.shutdown = async function () {
   await Db.close()
   await log.shutdown()
   await this.engine.close()
-  await cache.close()
+  for (const name in caches) {
+    await caches[name].close()
+  }
+
   theone.app = undefined
   this.initWaiting = undefined
   this.config = {}
