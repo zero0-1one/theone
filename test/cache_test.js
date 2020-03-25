@@ -13,7 +13,8 @@ const options = {
 }
 
 describe('cache', function () {
-  let cache = Cache.createWrap(new Cache(options))
+  let cache = Cache.createWrap(new Cache(options, 0))
+  let cacheV2 = Cache.createWrap(new Cache(options, 2))
   it('set and get', async function () {
     let a = await cache.get('a')
     assert.isUndefined(a)
@@ -82,7 +83,7 @@ describe('cache', function () {
     assert.isUndefined(await cache('a'))
   })
 
-  it('clearTag', async function () {
+  it('cache:clearTag', async function () {
     await cache.tag('A')('a', 'aaaa')
     await cache.tag('B')('a', 'bbbb')
     assert.equal(await cache.tag('A')('a'), 'aaaa')
@@ -90,6 +91,16 @@ describe('cache', function () {
     await cache.clearTag('A')
     assert.isUndefined(await cache.tag('A')('a'))
     assert.equal(await cache.tag('B')('a'), 'bbbb')
+  })
+
+  it('version', async function () {
+    await cache.set('a', 'aaaa')
+    assert.equal(await cache.get('a'), 'aaaa')
+    assert.isUndefined(await cacheV2.get('a'))
+
+    await cache.tag('A')('a', 'aaaa')
+    assert.equal(await cache.tag('A')('a'), 'aaaa')
+    assert.isUndefined(await cacheV2.tag('A')('a'))
   })
 
   it('close', async function () {
@@ -101,8 +112,8 @@ describe('cache', function () {
 
 
 describe('cache tag', function () {
-  let tagA = Cache.createWrap(new Cache(options), 'A')
-  let tagB = Cache.createWrap(new Cache(options)).tag('B')
+  let tagA = Cache.createWrap(new Cache(options, 3), 'A')
+  let tagB = Cache.createWrap(new Cache(options, 4)).tag('B')
   it('set and get', async function () {
     let a = await tagA.get('a')
     assert.isUndefined(a)

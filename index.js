@@ -60,11 +60,11 @@ module.exports.getCache = function (options, tag) {
   }
   if (name) {
     if (!caches.hasOwnProperty(name)) {
-      caches[name] = Cache.createWrap(new Cache(options))
+      caches[name] = Cache.createWrap(new Cache(options, theone.config['cache']['version']))
     }
     return tag ? caches[name].tag(tag) : caches[name]
   } else {
-    let cache = Cache.createWrap(new Cache(options))
+    let cache = Cache.createWrap(new Cache(options, theone.config['cache']['version']))
     return tag ? cache.tag(tag) : cache
   }
 }
