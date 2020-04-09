@@ -6,7 +6,7 @@ const Db = require('./lib/db')
 const log = require('./lib/log')
 const Cache = require('./lib/cache')
 const App = require('./lib/app')
-const Response = require('./lib/response')
+const { Response, RequestError } = require('./lib/response')
 const path = require('path')
 
 /*
@@ -42,6 +42,7 @@ module.exports.log = log
 module.exports.config = {}
 module.exports.env = {}
 module.exports.Response = Response
+module.exports.RequestError = RequestError
 
 let caches = {} //存储通过字符串创建的 cache, 或 options 中有 name 属性的
 module.exports.getCache = function (options, tag) {
