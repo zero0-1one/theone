@@ -21,10 +21,6 @@ const defEnvironment = {
 
   //可以提供一个额外的命名空间, 会创建一个 require('zo-theone') 引用的全局变量.
   NAMESPACE: 'theone',
-  //是否锁定 global变量,  true:禁止添加全局变量,  如果为数组则指定允许的全局变量
-  GLOBAL_LOCK: true,
-  //禁用 eval 方法
-  DISABLE_EVAL: true,
 
   //绝对路径 默认当前工作目录 其他相当 ROOT_DIR 的相当路径可以使用 theone.path( other) 获取绝对路径
   ROOT_DIR: process.cwd(),
@@ -95,26 +91,17 @@ module.exports.create = async function (environment = {}, init = () => { }) {
 
   if (this.env.USE_INT && global['Int'] === undefined) global['Int'] = 'Int type' //定义一个名为 Int 的全局变量来支持 action 参数指定 Int 类型
 
-  if (this.env.DISABLE_EVAL) {
-    // eslint-disable-next-line no-eval
-    delete global['eval']
-    // delete global['Function']   //暂时还没有很好的方法禁用 new Function
-  }
-
-  // GLOBAL_LOCK: ['wordLib'],
-  if (this.env.GLOBAL_LOCK) {
-    require('./lib/global_lock')(this.env.GLOBAL_LOCK)
-  }
-
   let cfg = config.load(this.path(this.env.CONFIG_DIR), this.env.ENV_NAME)
   toUtil.deepFreeze(Object.assign(this.config, cfg))
   log.init(this.config['log'], this.env.ROOT_DIR)
 
   theone.cache = theone.getCache(this.config['cache']['default'])
 
-  let engine = this.env.DEBUG ? require('./lib/debug') : require('./lib/release')
-  this.engine = new engine()
-  await this.engine.start()
+  if (this.env.DEBUG) {
+    this.debug = require('./lib/debug')
+    await this.debug.start()
+  }
+
   await init()
   theone.app = new App()
   initWaiting.resolve()
@@ -129,7 +116,7 @@ module.exports.shutdown = async function () {
   await theone.app.close()
   await Db.close()
   await log.shutdown()
-  await this.engine.close()
+  if (this.debug) await this.debug.close()
   for (const name in caches) {
     await caches[name].close()
   }

@@ -38,7 +38,7 @@
     "mocha": "^5.2.0",
     "nyc": "^15.0.0",
     "zo-mocha-ext": "^1.0.3",
-    "zo-theone-client": "^1.0.5"
+    "zo-theone-client": "^1.0.6"
   },
   "author": "zero0-1one",
   "license": "MIT",

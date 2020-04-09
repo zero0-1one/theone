@@ -12,10 +12,6 @@
     "ecmaVersion": 8
   },
   "rules": {
-    "strict": [
-      "error",
-      "global"
-    ],
     "no-console": "warn",
     "no-undef": [
       "warn"
