@@ -5,6 +5,7 @@
     "mocha": true,
     "es6": true
   },
+  "extends": ["eslint:recommended"],
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -13,17 +14,9 @@
   },
   "rules": {
     "no-console": "warn",
-    "no-undef": [
-      "warn"
-    ],
-    "semi": [
-      "error",
-      "never"
-    ],
-    "quotes": [
-      "warn",
-      "single"
-    ],
+    "no-undef": ["warn"],
+    "semi": ["error", "never"],
+    "quotes": ["warn", "single"],
     "no-unused-vars": "warn",
     "no-extra-semi": "error",
     "no-const-assign": "warn",
@@ -32,7 +25,8 @@
     "constructor-super": "warn",
     "valid-typeof": "warn",
     "no-new-func": "error",
-    "no-eval": "error"
+    "no-eval": "error",
+    "no-empty": "off"
   },
   "globals": {
     "theone": true

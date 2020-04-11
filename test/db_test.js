@@ -10,7 +10,9 @@ const options = {
   'user': 'theone_tester',
   'password': '12345',
   'database': 'theone_test',
-  'connectionLimit': 5
+  'connectionLimit': 5,
+  'queueLimit': 0,
+  'waitForConnections': true,
 }
 
 async function safeCall(cb, opts = options, mustInTrans = false) {
@@ -89,7 +91,7 @@ describe('db', function () {
       let rt = await db.query('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
       assert.deepEqual(rt, [
         { id: id1, k: 'a', v: iter },
-        { id: id2, k: 'b', v: iter }
+        { id: id2, k: 'b', v: iter },
       ])
       await db.query('DELETE FROM test_table WHERE k=? and v=?', ['a', iter])
       await db.query('UPDATE test_table SET k=CONCAT("u",k) WHERE v=?', iter)
@@ -116,7 +118,7 @@ describe('db', function () {
       let rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
       assert.deepEqual(rt, [
         { id: id1, k: 'a', v: iter },
-        { id: id2, k: 'b', v: iter }
+        { id: id2, k: 'b', v: iter },
       ])
       await db.execute('DELETE FROM test_table WHERE k=? and v=?', ['a', iter])
       await db.execute('UPDATE test_table SET k=CONCAT("u",k) WHERE v=?', iter)
@@ -135,35 +137,66 @@ describe('db', function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
     await safeCall(async db => {
-      await db.execute(
-        'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [['a', iter, 'b', iter, 'c', iter, 'd', iter]]
-      )
-      await db.execute(
-        'INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)',
-        ['e', iter, [['f', iter], ['g', iter]], 'h', iter]
-      )
+      await db.execute('INSERT INTO test_table VALUES {(null,?,?)},...', [['a', iter, 'b', iter, 'c', iter, 'd', iter]])
+      await db.execute('INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)', [
+        'e',
+        iter,
+        [
+          ['f', iter],
+          ['g', iter],
+        ],
+        'h',
+        iter,
+      ])
 
+      await db.execute('INSERT INTO test_table VALUES {(null,?,?)},...', [['i', iter, 'j', iter, 'k', iter, 'l', iter]], { maxRow: 2 })
       await db.execute(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [['i', iter, 'j', iter, 'k', iter, 'l', iter]], { maxRow: 2 }
+        [
+          [
+            ['m', iter],
+            ['n', iter],
+            ['o', iter],
+            ['p', iter],
+          ],
+        ],
+        { maxRow: 3 }
       )
       await db.execute(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [[['m', iter], ['n', iter], ['o', iter], ['p', iter]]], { maxRow: 3 }
-      )
-      await db.execute(
-        'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [[['r', iter], ['s', iter], ['t', iter], ['u', iter]]], { maxRow: 100 }
+        [
+          [
+            ['r', iter],
+            ['s', iter],
+            ['t', iter],
+            ['u', iter],
+          ],
+        ],
+        { maxRow: 100 }
       )
 
       let rt = await db.execute('SELECT k, v FROM test_table WHERE v=? ORDER BY k', iter)
       assert.deepEqual(rt, [
-        { k: 'a', v: iter }, { k: 'b', v: iter }, { k: 'c', v: iter }, { k: 'd', v: iter },
-        { k: 'e', v: iter }, { k: 'f', v: iter }, { k: 'g', v: iter }, { k: 'h', v: iter },
-        { k: 'i', v: iter }, { k: 'j', v: iter }, { k: 'k', v: iter }, { k: 'l', v: iter },
-        { k: 'm', v: iter }, { k: 'n', v: iter }, { k: 'o', v: iter }, { k: 'p', v: iter },
-        { k: 'r', v: iter }, { k: 's', v: iter }, { k: 't', v: iter }, { k: 'u', v: iter },
+        { k: 'a', v: iter },
+        { k: 'b', v: iter },
+        { k: 'c', v: iter },
+        { k: 'd', v: iter },
+        { k: 'e', v: iter },
+        { k: 'f', v: iter },
+        { k: 'g', v: iter },
+        { k: 'h', v: iter },
+        { k: 'i', v: iter },
+        { k: 'j', v: iter },
+        { k: 'k', v: iter },
+        { k: 'l', v: iter },
+        { k: 'm', v: iter },
+        { k: 'n', v: iter },
+        { k: 'o', v: iter },
+        { k: 'p', v: iter },
+        { k: 'r', v: iter },
+        { k: 's', v: iter },
+        { k: 't', v: iter },
+        { k: 'u', v: iter },
       ])
     })
   })
@@ -172,37 +205,69 @@ describe('db', function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
     await safeCall(async db => {
+      await db.query('INSERT INTO test_table VALUES {(null,?,?)},...', [['a', iter, 'b', iter, 'c', iter, 'd', iter]])
+      await db.query('INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)', [
+        'e',
+        iter,
+        [
+          ['f', iter],
+          ['g', iter],
+        ],
+        'h',
+        iter,
+      ])
+
+      await db.query('INSERT INTO test_table VALUES {(null,?,?)},...', [['i', iter, 'j', iter, 'k', iter, 'l', iter]], {
+        maxRow: 2,
+      })
       await db.query(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [['a', iter, 'b', iter, 'c', iter, 'd', iter]]
-      )
-      await db.query(
-        'INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)',
-        ['e', iter, [['f', iter], ['g', iter]], 'h', iter]
+        [
+          [
+            ['m', iter],
+            ['n', iter],
+            ['o', iter],
+            ['p', iter],
+          ],
+        ],
+        { maxRow: 3 }
       )
 
       await db.query(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [['i', iter, 'j', iter, 'k', iter, 'l', iter]], { maxRow: 2 }
+        [
+          [
+            ['r', iter],
+            ['s', iter],
+            ['t', iter],
+            ['u', iter],
+          ],
+        ],
+        { maxRow: 100 }
       )
-      await db.query(
-        'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [[['m', iter], ['n', iter], ['o', iter], ['p', iter]]], { maxRow: 3 }
-      )
-
-      await db.query(
-        'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [[['r', iter], ['s', iter], ['t', iter], ['u', iter]]], { maxRow: 100 }
-      )
-
 
       let rt = await db.query('SELECT k, v FROM test_table WHERE v=? ORDER BY k', iter)
       assert.deepEqual(rt, [
-        { k: 'a', v: iter }, { k: 'b', v: iter }, { k: 'c', v: iter }, { k: 'd', v: iter },
-        { k: 'e', v: iter }, { k: 'f', v: iter }, { k: 'g', v: iter }, { k: 'h', v: iter },
-        { k: 'i', v: iter }, { k: 'j', v: iter }, { k: 'k', v: iter }, { k: 'l', v: iter },
-        { k: 'm', v: iter }, { k: 'n', v: iter }, { k: 'o', v: iter }, { k: 'p', v: iter },
-        { k: 'r', v: iter }, { k: 's', v: iter }, { k: 't', v: iter }, { k: 'u', v: iter },
+        { k: 'a', v: iter },
+        { k: 'b', v: iter },
+        { k: 'c', v: iter },
+        { k: 'd', v: iter },
+        { k: 'e', v: iter },
+        { k: 'f', v: iter },
+        { k: 'g', v: iter },
+        { k: 'h', v: iter },
+        { k: 'i', v: iter },
+        { k: 'j', v: iter },
+        { k: 'k', v: iter },
+        { k: 'l', v: iter },
+        { k: 'm', v: iter },
+        { k: 'n', v: iter },
+        { k: 'o', v: iter },
+        { k: 'p', v: iter },
+        { k: 'r', v: iter },
+        { k: 's', v: iter },
+        { k: 't', v: iter },
+        { k: 'u', v: iter },
       ])
     })
   })
@@ -238,8 +303,6 @@ describe('db', function () {
       })
     })
   })
-
-
 
   //不close 测试用例不会退出 istanbul/nyc 也就无法统计覆盖了
   // it('close', async function() {
