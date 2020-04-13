@@ -12,19 +12,16 @@ let clearTable = async function () {
 const N = 1
 
 describe('request_test', function () {
-
   it('getCallMid', async function () {
     await client.get('account/login/getCallMid')
     let rt = await client.get('account/login/getCallMid')
     assert.deepEqual(rt, ['midB', 'midA', 'midC'])
   })
 
-
   its_par(N, 'request', async function () {
     let rt = await client.get('account/login/loginByPhone', { phone: '123456', password: 'abcdef' })
     assert.deepEqual(rt, ['123456', 'abcdef'])
   })
-
 
   it('set and get session', async function () {
     await client.post('account/login/setSession', { data: 123 })
@@ -33,14 +30,18 @@ describe('request_test', function () {
     assert.deepEqual(rt, 234)
   })
 
-
-  it('set and get token', async function () {
+  it('createToken, getTokenData', async function () {
     await client.get('account/login/createToken', { data: 123 })
     let token = await client.post('account/login/createToken', { data: 234 })
-    let rt = await client.post('account/login/getToken', {}, { header: { authorization: 'Bearer ' + token } })
+    let rt = await client.post('account/login/getTokenData', {}, { header: { authorization: 'Bearer ' + token } })
     assert.deepEqual(rt.data, 234)
   })
 
+  it('verifyToken', async function () {
+    let token = await client.post('account/login/createToken', { data: 234 })
+    let rt = await client.post('account/login/verifyToken', { token })
+    assert.deepEqual(rt.data, 234)
+  })
 
   describe('nodb parallel', function () {
     its_par(N, 'succeed (nodb)', async function () {

@@ -21,17 +21,21 @@ module.exports = class {
     return data
   }
 
-
   getSession_Action() {
     return this.ctx.session.data
   }
 
-  createToken_Action(data) {
-    return this.sign({ data })
+  async createToken_Action(data) {
+    let token = await this.jwtSign({ data })
+    return token
   }
 
+  async verifyToken_Action(token) {
+    let data = await this.jwtVerify(token)
+    return data
+  }
 
-  getToken_Action() {
+  getTokenData_Action() {
     return this.ctx.state.user
   }
 
