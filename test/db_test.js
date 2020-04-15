@@ -12,7 +12,7 @@ const options = {
   'database': 'theone_test',
   'connectionLimit': 5,
   'queueLimit': 0,
-  'waitForConnections': true,
+  'waitForConnections': true
 }
 
 async function safeCall(cb, opts = options, mustInTrans = false) {
@@ -91,7 +91,7 @@ describe('db', function () {
       let rt = await db.query('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
       assert.deepEqual(rt, [
         { id: id1, k: 'a', v: iter },
-        { id: id2, k: 'b', v: iter },
+        { id: id2, k: 'b', v: iter }
       ])
       await db.query('DELETE FROM test_table WHERE k=? and v=?', ['a', iter])
       await db.query('UPDATE test_table SET k=CONCAT("u",k) WHERE v=?', iter)
@@ -118,7 +118,7 @@ describe('db', function () {
       let rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
       assert.deepEqual(rt, [
         { id: id1, k: 'a', v: iter },
-        { id: id2, k: 'b', v: iter },
+        { id: id2, k: 'b', v: iter }
       ])
       await db.execute('DELETE FROM test_table WHERE k=? and v=?', ['a', iter])
       await db.execute('UPDATE test_table SET k=CONCAT("u",k) WHERE v=?', iter)
@@ -133,7 +133,7 @@ describe('db', function () {
     })
   })
 
-  its_par(N, 'execute  use  pattern', async function () {
+  its_par(N, 'execute use pattern', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
     await safeCall(async db => {
@@ -143,13 +143,17 @@ describe('db', function () {
         iter,
         [
           ['f', iter],
-          ['g', iter],
+          ['g', iter]
         ],
         'h',
-        iter,
+        iter
       ])
 
-      await db.execute('INSERT INTO test_table VALUES {(null,?,?)},...', [['i', iter, 'j', iter, 'k', iter, 'l', iter]], { maxRow: 2 })
+      await db.execute(
+        'INSERT INTO test_table VALUES {(null,?,?)},...',
+        [['i', iter, 'j', iter, 'k', iter, 'l', iter]],
+        { maxRow: 2 }
+      )
       await db.execute(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
         [
@@ -157,8 +161,8 @@ describe('db', function () {
             ['m', iter],
             ['n', iter],
             ['o', iter],
-            ['p', iter],
-          ],
+            ['p', iter]
+          ]
         ],
         { maxRow: 3 }
       )
@@ -169,8 +173,8 @@ describe('db', function () {
             ['r', iter],
             ['s', iter],
             ['t', iter],
-            ['u', iter],
-          ],
+            ['u', iter]
+          ]
         ],
         { maxRow: 100 }
       )
@@ -196,12 +200,12 @@ describe('db', function () {
         { k: 'r', v: iter },
         { k: 's', v: iter },
         { k: 't', v: iter },
-        { k: 'u', v: iter },
+        { k: 'u', v: iter }
       ])
     })
   })
 
-  its_par(N, 'query  use  pattern', async function () {
+  its_par(N, 'query use pattern', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
     await safeCall(async db => {
@@ -211,14 +215,14 @@ describe('db', function () {
         iter,
         [
           ['f', iter],
-          ['g', iter],
+          ['g', iter]
         ],
         'h',
-        iter,
+        iter
       ])
 
       await db.query('INSERT INTO test_table VALUES {(null,?,?)},...', [['i', iter, 'j', iter, 'k', iter, 'l', iter]], {
-        maxRow: 2,
+        maxRow: 2
       })
       await db.query(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
@@ -227,8 +231,8 @@ describe('db', function () {
             ['m', iter],
             ['n', iter],
             ['o', iter],
-            ['p', iter],
-          ],
+            ['p', iter]
+          ]
         ],
         { maxRow: 3 }
       )
@@ -240,8 +244,8 @@ describe('db', function () {
             ['r', iter],
             ['s', iter],
             ['t', iter],
-            ['u', iter],
-          ],
+            ['u', iter]
+          ]
         ],
         { maxRow: 100 }
       )
@@ -267,7 +271,28 @@ describe('db', function () {
         { k: 'r', v: iter },
         { k: 's', v: iter },
         { k: 't', v: iter },
-        { k: 'u', v: iter },
+        { k: 'u', v: iter }
+      ])
+    })
+  })
+
+  its_par(N, 'select use pattern', async function () {
+    let iter = this.iteration
+    await this.beforeAll(clearTable)
+    await safeCall(async db => {
+      await db.query(
+        'INSERT INTO test_table VALUES {(null,?,?)},...',
+        [['a', iter, 'b', iter, 'c', iter, 'd', iter, 'e', iter, 'f', iter]],
+        { maxRow: 2 }
+      )
+      let rt = await db.query('SELECT k, v FROM test_table WHERE v = ? AND k IN ({?},...) ORDER BY k', [
+        iter,
+        ['a', 'b', 's', 'f']
+      ])
+      assert.deepEqual(rt, [
+        { k: 'a', v: iter },
+        { k: 'b', v: iter },
+        { k: 'f', v: iter }
       ])
     })
   })
