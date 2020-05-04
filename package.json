@@ -4,7 +4,7 @@
   "description": "A smart and very fast application server framework",
   "main": "index.js",
   "scripts": {
-    "test": "nyc --reporter=html --reporter=text mocha --timeout=10000 --slow=5000 test/test.js"
+    "test": "nyc --reporter=html --reporter=text mocha --timeout=10000 --slow=5000 --delay test/test.js"
   },
   "keywords": [
     "theone",

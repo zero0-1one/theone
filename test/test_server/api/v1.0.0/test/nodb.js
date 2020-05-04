@@ -13,7 +13,6 @@ module.exports = class {
     return this.error('error')
   }
 
-
   throw_Action() {
     throw new Error('error')
   }
@@ -32,6 +31,17 @@ module.exports = class {
 
   paramDate_Action(arg = Date) {
     return arg
+  }
+
+  async setCache_Action(name, value, isThrow = false) {
+    await this.cache(name, value)
+    if (isThrow) throw new Error()
+    return { value }
+  }
+
+  async getCache_Action(name) {
+    let value = await theone.cache(name)
+    return { value }
   }
 
   injectAfter_Action(arg) {
