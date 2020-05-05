@@ -9,7 +9,7 @@ let clearTable = async function () {
   let rt = await client.post('test/db/clearTable')
   assert.isTrue(rt)
 }
-const N = 1
+const N = 10
 
 describe('request_test', function () {
   it('getCallMid', async function () {

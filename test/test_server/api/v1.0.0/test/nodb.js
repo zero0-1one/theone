@@ -1,5 +1,4 @@
-'use strict'
-
+const assert = require('assert')
 module.exports = class {
   succeed_Action() {
     return 'succeed'
@@ -40,8 +39,23 @@ module.exports = class {
   }
 
   async getCache_Action(name) {
-    let value = await theone.cache(name)
+    let value = await this.cache(name)
     return { value }
+  }
+
+  async cacheRepeatedly_Action() {
+    let rt1 = await this.cache('aaaa', 123)
+    let rt2 = await this.cache('aaaa', async () => 456)
+    let rt3 = await this.cache('aaaa', 456)
+    let rt4 = await this.cache('aaaa')
+    await this.cache('aaaa', null)
+    let rt5 = await this.cache('aaaa', async () => 789)
+    assert(rt1 == 123)
+    assert(rt2 == 123)
+    assert(rt3 == 456)
+    assert(rt4 == 456)
+    assert(rt5 == 789)
+    return true
   }
 
   injectAfter_Action(arg) {

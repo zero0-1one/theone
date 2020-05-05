@@ -57,7 +57,7 @@ describe('server test', function () {
       assert.deepEqual(rt2, {})
     })
 
-    it.only('tagCache', async function () {
+    it('tagCache', async function () {
       await api.post('test/nodb/setCache', { name: 'tag:aaa', value: 123 })
       let rt = await api.get('test/nodb/getCache', { name: 'tag:aaa' })
       assert.deepEqual(rt, { value: 123 })
@@ -70,6 +70,11 @@ describe('server test', function () {
       await api.post('test/nodb/setCache', { name: 'tag:aaa', value: 567, isThrow: true })
       let rt2 = await api.get('test/nodb/getCache', { name: 'tag:aaa' })
       assert.deepEqual(rt2, {})
+    })
+
+    it('cache repeatedly', async function () {
+      let rt = await api.post('test/nodb/cacheRepeatedly')
+      assert.isTrue(rt)
     })
   })
 
