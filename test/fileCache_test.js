@@ -6,7 +6,7 @@ const fs = require('fs')
 const path = require('path')
 
 let options = {
-  'dir': path.join(__dirname, 'test_cache/fileCache')
+  'dir': path.join(__dirname, 'test_cache/fileCache'),
 }
 let cache = new FileCache(options)
 
@@ -60,7 +60,11 @@ describe('fileCache', function () {
     await cache.set('name', { expired: false, data: 'tagA' }, 'tagA')
     await cache.set('name', { expired: true, data: 'tagB' }, 'tagB')
     await cache.gc(isExpired)
-
+    assert.isTrue(fs.existsSync(path.join(options.dir, '_tags_', 'tagA')))
+    assert.isTrue(fs.existsSync(path.join(options.dir, '_tags_', 'tagB')))
+    await cache.gc(isExpired) //第二次清理 空文件夹
+    assert.isTrue(fs.existsSync(path.join(options.dir, '_tags_', 'tagA')))
+    assert.isFalse(fs.existsSync(path.join(options.dir, '_tags_', 'tagB')))
     let noTag = await cache.get('name')
     let tagA = await cache.get('name', 'tagA')
     let tagB = await cache.get('name', 'tagB')
