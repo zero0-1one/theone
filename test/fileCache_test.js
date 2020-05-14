@@ -59,10 +59,9 @@ describe('fileCache', function () {
     await cache.set('name', { expired: false, data: 'no tag' })
     await cache.set('name', { expired: false, data: 'tagA' }, 'tagA')
     await cache.set('name', { expired: true, data: 'tagB' }, 'tagB')
-    await cache.gc(isExpired)
     assert.isTrue(fs.existsSync(path.join(options.dir, '_tags_', 'tagA')))
     assert.isTrue(fs.existsSync(path.join(options.dir, '_tags_', 'tagB')))
-    await cache.gc(isExpired) //第二次清理 空文件夹
+    await cache.gc(isExpired)
     assert.isTrue(fs.existsSync(path.join(options.dir, '_tags_', 'tagA')))
     assert.isFalse(fs.existsSync(path.join(options.dir, '_tags_', 'tagB')))
     let noTag = await cache.get('name')
@@ -82,11 +81,11 @@ describe('fileCache', function () {
     await cache.set('name4', { expired: true, data: 'partTagB' }, 'partTagB')
     await cache.set('name5', { expired: true, data: 'partTagB' }, 'partTagB')
     await cache.set('name6', { expired: true, data: 'partTagB' }, 'partTagB')
-    await cache.gc(isExpired, [0, 2])
+
     assert.isTrue(fs.existsSync(path.join(options.dir, '_tags_', 'partTagA')))
     assert.isTrue(fs.existsSync(path.join(options.dir, '_tags_', 'partTagB')))
+    await cache.gc(isExpired, [0, 2])
     await cache.gc(isExpired, [1, 2])
-    await cache.gc(isExpired, [1, 2]) //第二次清理 空文件夹
     assert.isTrue(fs.existsSync(path.join(options.dir, '_tags_', 'partTagA')))
     assert.isFalse(fs.existsSync(path.join(options.dir, '_tags_', 'partTagB')))
     let noTag = await cache.get('name')
