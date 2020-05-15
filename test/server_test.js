@@ -88,5 +88,10 @@ describe('server test', function () {
       let rt = await admin.get('db/getModel')
       assert.equal(rt, 'internal')
     })
+
+    it.only('model remember', async function () {
+      let rt = await api.get('test/nodb/testRemember')
+      assert.equal(rt, true)
+    })
   })
 })

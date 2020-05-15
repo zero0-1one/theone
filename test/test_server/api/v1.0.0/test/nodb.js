@@ -1,4 +1,5 @@
 const assert = require('assert')
+const TestM = require('./../../../model/test')
 module.exports = class {
   succeed_Action() {
     return 'succeed'
@@ -97,5 +98,17 @@ module.exports = class {
       data.before[key] = dbCtrl[key]
     }
     return data
+  }
+
+  testRemember_Action() {
+    let testM = new TestM(this)
+    let n1 = testM.add()
+    let n2 = testM.add()
+    assert(n1 == 1 && n2 == 2)
+
+    let n3 = testM.remember.add()
+    let n4 = testM.remember.add()
+    assert(n3 == 3 && n4 == 3)
+    return true
   }
 }
