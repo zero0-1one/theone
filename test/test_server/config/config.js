@@ -3,35 +3,41 @@
 module.exports = {
   'port': 18510,
 
-  'database': [{
-    'name': 'db',
-    'host': 'localhost',
-    'user': 'theone_tester',
-    'password': '12345',
-    'database': 'theone_test',
-    'connectionLimit': 5
-  }, {
-    'name': 'logdb',
-    'host': 'localhost',
-    'user': 'theone_tester',
-    'password': '12345',
-    'database': 'theone_log_test',
-    'connectionLimit': 2
-  }],
+  'database': [
+    {
+      'name': 'db',
+      'host': 'localhost',
+      'user': 'theone_tester',
+      'password': '12345',
+      'database': 'theone_test',
+      'connectionLimit': 5,
+    },
+    {
+      'name': 'logdb',
+      'host': 'localhost',
+      'user': 'theone_tester',
+      'password': '12345',
+      'database': 'theone_log_test',
+      'connectionLimit': 2,
+    },
+  ],
 
-  'modules': [{
-    'name': 'api',
-    'multiVersion': true,
-    'middleware': ['midB', { name: 'midC', unless: ctrlName => ctrlName != 'hasMidC' }],
-  }, {
-    'name': 'admin',
-    'autoTransaction': false,
-    'internalModel': true
-  }],
+  'modules': [
+    {
+      'name': 'api',
+      'multiVersion': true,
+      'middleware': ['midB', { name: 'midC', unless: ctrlName => ctrlName != 'hasMidC' }],
+    },
+    {
+      'name': 'admin',
+      'autoTransaction': false,
+      'internalModel': true,
+    },
+  ],
 
   'log': {
     'type': 'file',
-    'sqlLog': false
+    'sqlLog': false,
   },
 
   'keys': ['adsfasdfahd#gfbn$', 'cads#@sdfadfv'],
@@ -39,10 +45,18 @@ module.exports = {
   'jwt': {
     'enabled': true,
     'passthrough': true,
-    'secret': 'asdfasdasdfas'
+    'secret': 'asdfasdasdfas',
   },
 
   'session': {
     'enabled': true,
-  }
+  },
+
+  'worker': {
+    'open': true,
+    'name': 'test',
+    'filename': './worker',
+    'autorestart': true,
+    'heartbeat': 1,
+  },
 }

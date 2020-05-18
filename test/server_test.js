@@ -1,11 +1,15 @@
 'use strict'
 const Client = require('./client')
 const assert = require('chai').assert
+const toUtil = require('../lib/util')
 
 let api = new Client('v1.0.0', 'api')
 let admin = new Client(null, 'admin')
 
 describe('server test', function () {
+  describe('worker', function () {
+
+  })
   describe('app', function () {
     it('setErrorHandlers  parsePath', async function () {
       let isHandler = false
@@ -89,7 +93,7 @@ describe('server test', function () {
       assert.equal(rt, 'internal')
     })
 
-    it.only('model remember', async function () {
+    it('model remember', async function () {
       let rt = await api.get('test/nodb/testRemember')
       assert.equal(rt, true)
     })

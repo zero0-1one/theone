@@ -16,36 +16,34 @@ const userConfig = {
     {
       'name': 'api',
       'database': 'db',
-      "mainDb": "db"
+      'mainDb': 'db',
     },
     {
       'name': 'admin',
       'database': 'db',
-      "mainDb": "db"
+      'mainDb': 'db',
     },
   ],
   'root_a': 1,
-  'root_b': [
-    1, 2, 3
-  ],
+  'root_b': [1, 2, 3],
   'a': {
     'a_a': 1,
-    'a_b': 'bbb'
+    'a_b': 'bbb',
   },
   'b': {
     'b_a': 'a',
-    'b_b': 123
+    'b_b': 123,
   },
   'x': {
     'x_root_a': 100,
     'x_root_b': {
-      'a': 123
+      'a': 123,
     },
     'c': {
-      'x_a': 100
+      'x_a': 100,
     },
-    'd': ['a', 'b', 'c']
-  }
+    'd': ['a', 'b', 'c'],
+  },
 }
 
 describe('config', function () {
@@ -61,8 +59,9 @@ describe('config', function () {
     let defModules = toUtil.deepCopy(config.DEF_CONFIG['modules'])
     toUtil.deepAssign(cfg, userConfig)
     cfg['databaseMap'] = {
-      [cfg['database']['name']]: cfg['database']
+      [cfg['database']['name']]: cfg['database'],
     }
+    cfg['worker'] = [cfg['worker']]
     cfg['database'] = [cfg['database']]
     cfg['modules'][0] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][0])
     cfg['modules'][1] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][1])
