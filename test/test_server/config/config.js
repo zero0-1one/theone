@@ -52,11 +52,14 @@ module.exports = {
     'enabled': true,
   },
 
-  'worker': {
+  'workers': {
     'open': true,
     'name': 'test',
+    'dir': './testWorker',
     'filename': './worker',
     'autorestart': true,
     'heartbeat': 1,
+
+    'debug': true,
   },
 }

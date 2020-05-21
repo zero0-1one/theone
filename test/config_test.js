@@ -1,9 +1,12 @@
 'use strict'
 
-const assert = require('chai').assert
 const path = require('path')
 const toUtil = require('../lib/util')
 const config = require('../lib/config')
+const chai = require('chai')
+const assert = chai.assert
+const expect = chai.expect
+chai.use(require('chai-like'))
 
 const userConfig = {
   'port': 17503,
@@ -61,13 +64,13 @@ describe('config', function () {
     cfg['databaseMap'] = {
       [cfg['database']['name']]: cfg['database'],
     }
-    cfg['worker'] = [cfg['worker']]
+    delete data['workers']
     cfg['database'] = [cfg['database']]
     cfg['modules'][0] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][0])
     cfg['modules'][1] = Object.assign(toUtil.deepCopy(defModules), cfg['modules'][1])
     cfg['modules'][0].database = cfg['modules'][1].database = [cfg['databaseMap']['db']]
     cfg['log']['file']['filename'] = './runtime/logs/' + data['appName'] + '.log'
     cfg['cache']['adapter']['file']['dir'] = './runtime/cache/'
-    assert.deepEqual(data, cfg)
+    expect(cfg).to.deep.like(data)
   })
 })

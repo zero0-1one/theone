@@ -1,14 +1,16 @@
 'use strict'
 const Client = require('./client')
 const assert = require('chai').assert
-const toUtil = require('../lib/util')
 
 let api = new Client('v1.0.0', 'api')
 let admin = new Client(null, 'admin')
 
 describe('server test', function () {
   describe('worker', function () {
-
+    it('callWorkerAction', async function () {
+      let data = await theone.callWorkerAction('test/b/bb/name', { abc: '123' })
+      assert.deepEqual(data, { name: 'b/bb', abc: 123 })
+    })
   })
   describe('app', function () {
     it('setErrorHandlers  parsePath', async function () {
