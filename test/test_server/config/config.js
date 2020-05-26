@@ -56,7 +56,7 @@ module.exports = {
     'open': true,
     'name': 'test',
     'dir': './testWorker',
-    'filename': './worker',
+    'entry': './worker',
     'autorestart': true,
     'heartbeat': 1,
 
