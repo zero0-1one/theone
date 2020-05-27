@@ -9,7 +9,7 @@ const env = {
 }
 theone.create(env).then(app => {
   app.runHttp()
-  run()
+  setTimeout(run, 1)
 })
 
 //theone 服务器的测试
