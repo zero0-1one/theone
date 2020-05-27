@@ -10,7 +10,7 @@ const options = {
   'user': 'theone_tester',
   'password': '12345',
   'database': 'theone_test',
-  'connectionLimit': 5,
+  'connectionLimit': 20,
   'queueLimit': 0,
   'waitForConnections': true,
 }
@@ -325,6 +325,64 @@ describe('db', function () {
       await safeCall(async db => {
         let rt = await db.executeOne('SELECT COUNT(*) n FROM test_table')
         assert.equal(rt.n, N)
+      })
+    })
+  })
+
+  //两层safeCall 连接数不够会死锁。 这里就测试 5 次
+  its_par(5, 'bind unbind', async function () {
+    let iter = this.iteration
+    await this.beforeAll(clearTable)
+    await safeCall(async db => {
+      await safeCall(async db2 => {
+        let id1, id2, rt
+        await db.bind(db2)
+        id1 = (await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['a', iter])).insertId
+        await db.beginTransaction()
+        await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['r', iter])
+        await db2.execute('INSERT INTO test_table VALUES(null,?,?)', ['r2', iter])
+        await db.rollback()
+
+        rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
+        assert.deepEqual(rt, [{ id: id1, k: 'a', v: iter }])
+
+        await db.beginTransaction()
+        await db.execute('DELETE FROM test_table WHERE k=? and v=?', ['a', iter])
+        id1 = (await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['b', iter])).insertId
+        id2 = (await db2.execute('INSERT INTO test_table VALUES(null,?,?)', ['b2', iter])).insertId
+        await db.commit()
+        rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
+        let rows = [
+          { id: id1, k: 'b', v: iter },
+          { id: id2, k: 'b2', v: iter },
+        ]
+        assert.deepEqual(rt, rows)
+
+        await db.unbind(db2)
+        await db.beginTransaction()
+        await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['x', iter])
+
+        //unbind后不再同步回滚，会添加成功
+        id2 = (await db2.execute('INSERT INTO test_table VALUES(null,?,?)', ['x2', iter])).insertId
+        rows.push({ id: id2, k: 'x2', v: iter })
+        await db.rollback()
+        rt = await db.execute('SELECT * FROM test_table WHERE v=? ORDER BY id', iter)
+
+        assert.deepEqual(rt, rows)
+
+        //添加 n1, n2 不提交也不关闭,测试release 后事务会不会返回池内再分配给其他使用
+        await db.beginTransaction()
+        assert.isFalse(db2.isBegin())
+        await db.bind(db2)// bind 后绑定
+        assert.isTrue(db2.isBegin())
+        await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['n1', iter])
+        await db2.execute('INSERT INTO test_table VALUES(null,?,?)', ['n2', iter])
+      })
+    })
+    await this.afterAll(async () => {
+      await safeCall(async db => {
+        let rt = await db.executeOne('SELECT COUNT(*) n FROM test_table')
+        assert.equal(rt.n, 3 * 5)
       })
     })
   })
