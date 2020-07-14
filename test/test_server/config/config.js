@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = {
-  'port': 18510,
+  'port': 8080,
 
   'database': [
     {
