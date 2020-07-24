@@ -37,7 +37,6 @@ describe('log', function () {
     })
     log.mark('this is mark log')
     log.fatal('this is fatal log')
-    log.force('this is force log')
     log.error('this is error log')
     log.warn('this is warn log')
     log.info('this is info log')
