@@ -2,7 +2,7 @@
 const Client = require('zo-theone-client')
 module.exports = class TestClient {
   constructor(version, moduleName) {
-    let url = 'http://localhost:8080/'
+    let url = 'http://localhost:19510/'
     if (moduleName) url += moduleName + '/'
     if (version) url += version + '/'
     this.client = new Client({
