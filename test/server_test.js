@@ -8,7 +8,7 @@ let admin = new Client(null, 'admin')
 describe('server test', function () {
   describe('worker', function () {
     it('callWorkerAction', async function () {
-      let data = await theone.callWorkerAction('test/b/bb/name', { abc: '123' })
+      let data = await theone.callWorkerAction('test', 'test/b/bb/name', { abc: '123' })
       assert.deepEqual(data, { name: 'b/bb', abc: 123 })
     })
   })
