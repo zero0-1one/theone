@@ -9,7 +9,11 @@ Theone 是专门为中小型 App 打造的 API 服务器框架。它基于 koa2�
 - 多模块
 - 自动事务
 - 多版本管理，自动继承
+<<<<<<< HEAD
 - 无模型，sql 编程高效、易优化、学习成本低
+=======
+- 无模型，sql 编程高效、易优化
+>>>>>>> e82d788e5c85240b5866a24f5bbdd7a7c0e23d72
 - 支持 Worker 线程，密集计算不阻塞
 - 多端口、http、https 支持
 - 其他常规功能：jwt、session、cache、log、定时任务等
@@ -20,7 +24,11 @@ Theone 是专门为中小型 App 打造的 API 服务器框架。它基于 koa2�
 npm install zo-theone  --save
 ```
 
+<<<<<<< HEAD
 如下快速实现接口：http://localhost:18510/api/index/foo/id/123?time=2018-05-10T04:50
+=======
+如下快速实现：http://localhost:18510/api/index/foo/id/123?time=2018-05-10T04:50
+>>>>>>> e82d788e5c85240b5866a24f5bbdd7a7c0e23d72
 
 ```js
 //  api/index.js
