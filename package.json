@@ -23,7 +23,7 @@
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
     "koa-compose": "^4.1.0",
-    "koa-jwt": "^3.6.0",
+    "koa-jwt": "^4.0.4",
     "koa-session": "^5.11.0",
     "koa-static": "^5.0.0",
     "log4js": "^6.1.1",
@@ -35,7 +35,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-like": "^1.1.1",
-    "mocha": "^5.2.0",
+    "mocha": "^10.2.0",
     "nyc": "^15.0.0",
     "zo-mocha-ext": "^1.0.3",
     "zo-theone-client": "^1.0.6"
