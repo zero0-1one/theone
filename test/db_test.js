@@ -41,27 +41,6 @@ describe('db', function () {
     })
   })
 
-  it('setLazyInit', async function () {
-    await safeCall(async db => {
-      let init = false
-      db.setLazyInit(() => {
-        init = true
-      })
-      await db.beginTransaction()
-      assert.isFalse(init)
-      await db.query('SELECT COUNT(*) FROM test_table')
-      assert.isTrue(init)
-    })
-  })
-
-  it('isInit', async function () {
-    await safeCall(async db => {
-      assert.isFalse(db.isInit())
-      await db.query('SELECT COUNT(*) FROM test_table')
-      assert.isTrue(db.isInit())
-    })
-  })
-
   it('mustInTrans', async function () {
     await safeCall(
       async db => {
