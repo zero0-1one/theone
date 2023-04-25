@@ -15,14 +15,14 @@ const options = {
   'waitForConnections': true,
 }
 
-async function safeCall(cb, opts = options, mustInTrans = false) {
+async function callDb(cb, opts = options, mustInTrans = false) {
   opts = JSON.parse(JSON.stringify(opts))
   opts['mustInTrans'] = mustInTrans
-  return Db.safeCall(cb, opts)
+  return Db.call(cb, opts)
 }
 
 async function clearTable() {
-  await safeCall(async db => {
+  await callDb(async db => {
     await db.execute('DELETE FROM test_table')
   })
 }
@@ -30,19 +30,19 @@ async function clearTable() {
 const N = 200
 describe('db', function () {
   it('name', async function () {
-    await safeCall(async db => {
+    await callDb(async db => {
       assert.equal(db.name, 'db')
     })
   })
 
   its(N, 'database', async function () {
-    await safeCall(db => {
+    await callDb(db => {
       assert.equal(db.database, 'theone_test')
     })
   })
 
   it('mustInTrans', async function () {
-    await safeCall(
+    await callDb(
       async db => {
         let isThrow = false
         try {
@@ -62,7 +62,7 @@ describe('db', function () {
   its_par(N, 'query and queryOne', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
-    await safeCall(async db => {
+    await callDb(async db => {
       let id1 = (await db.query('INSERT INTO test_table VALUES(null,?,?)', ['a', iter])).insertId
       let id2 = (await db.query('INSERT INTO test_table VALUES(null,?,?)', ['b', iter])).insertId
       assert.isBelow(id1, id2)
@@ -79,7 +79,7 @@ describe('db', function () {
       assert.deepEqual(rt, [{ id: id2, k: 'ub', v: iter }])
     })
     await this.afterAll(async () => {
-      await safeCall(async db => {
+      await callDb(async db => {
         let rt = await db.queryOne('SELECT COUNT(*) n FROM test_table')
         assert.equal(rt.n, N)
       })
@@ -89,7 +89,7 @@ describe('db', function () {
   its_par(N, 'execute and executeOne', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
-    await safeCall(async db => {
+    await callDb(async db => {
       let id1 = (await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['a', iter])).insertId
       let id2 = (await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['b', iter])).insertId
       assert.isBelow(id1, id2)
@@ -105,7 +105,7 @@ describe('db', function () {
       assert.deepEqual(rt, [{ id: id2, k: 'ub', v: iter }])
     })
     await this.afterAll(async () => {
-      await safeCall(async db => {
+      await callDb(async db => {
         let rt = await db.executeOne('SELECT COUNT(*) n FROM test_table')
         assert.equal(rt.n, N)
       })
@@ -115,7 +115,7 @@ describe('db', function () {
   its_par(N, 'execute use pattern', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
-    await safeCall(async db => {
+    await callDb(async db => {
       await db.execute('INSERT INTO test_table VALUES {(null,?,?)},...', [['a', iter, 'b', iter, 'c', iter, 'd', iter]])
       await db.execute('INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)', [
         'e',
@@ -187,7 +187,7 @@ describe('db', function () {
   its_par(N, 'query use pattern', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
-    await safeCall(async db => {
+    await callDb(async db => {
       await db.query('INSERT INTO test_table VALUES {(null,?,?)},...', [['a', iter, 'b', iter, 'c', iter, 'd', iter]])
       await db.query('INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)', [
         'e',
@@ -258,7 +258,7 @@ describe('db', function () {
   its_par(N, 'select use pattern', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
-    await safeCall(async db => {
+    await callDb(async db => {
       await db.query(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
         [['a', iter, 'b', iter, 'c', iter, 'd', iter, 'e', iter, 'f', iter]],
@@ -279,7 +279,7 @@ describe('db', function () {
   its_par(N, 'transaction', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
-    await safeCall(async db => {
+    await callDb(async db => {
       let id1 = (await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['a', iter])).insertId
       await db.beginTransaction()
       await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['r', iter])
@@ -301,19 +301,19 @@ describe('db', function () {
       await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['n2', iter])
     })
     await this.afterAll(async () => {
-      await safeCall(async db => {
+      await callDb(async db => {
         let rt = await db.executeOne('SELECT COUNT(*) n FROM test_table')
         assert.equal(rt.n, N)
       })
     })
   })
 
-  //两层safeCall 连接数不够会死锁。 这里就测试 5 次
+  //两层call 连接数不够会死锁。 这里就测试 5 次
   its_par(5, 'bind unbind', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
-    await safeCall(async db => {
-      await safeCall(async db2 => {
+    await callDb(async db => {
+      await callDb(async db2 => {
         let id1, id2, rt
         await db.bind(db2)
         id1 = (await db.execute('INSERT INTO test_table VALUES(null,?,?)', ['a', iter])).insertId
@@ -359,7 +359,7 @@ describe('db', function () {
       })
     })
     await this.afterAll(async () => {
-      await safeCall(async db => {
+      await callDb(async db => {
         let rt = await db.executeOne('SELECT COUNT(*) n FROM test_table')
         assert.equal(rt.n, 3 * 5)
       })
