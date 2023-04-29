@@ -1,6 +1,6 @@
 {
   "name": "zo-theone",
-  "version": "1.10.3",
+  "version": "1.10.4",
   "description": "A smart and very fast application server framework",
   "main": "index.js",
   "scripts": {
