@@ -112,12 +112,12 @@ describe('db', function () {
     })
   })
 
-  its_par(N, 'execute use pattern', async function () {
+  its_par(N, 'patternQuery', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
     await callDb(async db => {
-      await db.execute('INSERT INTO test_table VALUES {(null,?,?)},...', [['a', iter, 'b', iter, 'c', iter, 'd', iter]])
-      await db.execute('INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)', [
+      await db.patternQuery('INSERT INTO test_table VALUES {(null,?,?)},...', [['a', iter, 'b', iter, 'c', iter, 'd', iter]])
+      await db.patternQuery('INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)', [
         'e',
         iter,
         [
@@ -128,12 +128,12 @@ describe('db', function () {
         iter,
       ])
 
-      await db.execute(
+      await db.patternQuery(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
         [['i', iter, 'j', iter, 'k', iter, 'l', iter]],
         { maxRow: 2 }
       )
-      await db.execute(
+      await db.patternQuery(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
         [
           [
@@ -145,7 +145,7 @@ describe('db', function () {
         ],
         { maxRow: 3 }
       )
-      await db.execute(
+      await db.patternQuery(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
         [
           [
@@ -184,94 +184,22 @@ describe('db', function () {
     })
   })
 
-  its_par(N, 'query use pattern', async function () {
+  its_par(N, 'select use patternQuery', async function () {
     let iter = this.iteration
     await this.beforeAll(clearTable)
     await callDb(async db => {
-      await db.query('INSERT INTO test_table VALUES {(null,?,?)},...', [['a', iter, 'b', iter, 'c', iter, 'd', iter]])
-      await db.query('INSERT INTO test_table VALUES (null,?,?), {(null,?,?)},... ,(null,?,?)', [
-        'e',
-        iter,
-        [
-          ['f', iter],
-          ['g', iter],
-        ],
-        'h',
-        iter,
-      ])
-
-      await db.query('INSERT INTO test_table VALUES {(null,?,?)},...', [['i', iter, 'j', iter, 'k', iter, 'l', iter]], {
-        maxRow: 2,
-      })
-      await db.query(
-        'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [
-          [
-            ['m', iter],
-            ['n', iter],
-            ['o', iter],
-            ['p', iter],
-          ],
-        ],
-        { maxRow: 3 }
-      )
-
-      await db.query(
-        'INSERT INTO test_table VALUES {(null,?,?)},...',
-        [
-          [
-            ['r', iter],
-            ['s', iter],
-            ['t', iter],
-            ['u', iter],
-          ],
-        ],
-        { maxRow: 100 }
-      )
-
-      let rt = await db.query('SELECT k, v FROM test_table WHERE v=? ORDER BY k', iter)
-      assert.deepEqual(rt, [
-        { k: 'a', v: iter },
-        { k: 'b', v: iter },
-        { k: 'c', v: iter },
-        { k: 'd', v: iter },
-        { k: 'e', v: iter },
-        { k: 'f', v: iter },
-        { k: 'g', v: iter },
-        { k: 'h', v: iter },
-        { k: 'i', v: iter },
-        { k: 'j', v: iter },
-        { k: 'k', v: iter },
-        { k: 'l', v: iter },
-        { k: 'm', v: iter },
-        { k: 'n', v: iter },
-        { k: 'o', v: iter },
-        { k: 'p', v: iter },
-        { k: 'r', v: iter },
-        { k: 's', v: iter },
-        { k: 't', v: iter },
-        { k: 'u', v: iter },
-      ])
-    })
-  })
-
-  its_par(N, 'select use pattern', async function () {
-    let iter = this.iteration
-    await this.beforeAll(clearTable)
-    await callDb(async db => {
-      await db.query(
+      await db.patternQuery(
         'INSERT INTO test_table VALUES {(null,?,?)},...',
         [['a', iter, 'b', iter, 'c', iter, 'd', iter, 'e', iter, 'f', iter]],
         { maxRow: 2 }
       )
-      let rt = await db.query('SELECT k, v FROM test_table WHERE v = ? AND k IN ({?},...) ORDER BY k', [
-        iter,
-        ['a', 'b', 's', 'f'],
-      ])
+      let rt = await db.patternQuery('SELECT k, v FROM test_table WHERE v = ? AND k IN ({?},...) ORDER BY k',
+        [iter, ['a', 'b', 's', 'f']],
+        { maxRow: 2 }
+      )
       assert.deepEqual(rt, [
-        { k: 'a', v: iter },
-        { k: 'b', v: iter },
-        { k: 'f', v: iter },
+        [{ k: 'a', v: iter }, { k: 'b', v: iter }],
+        [{ k: 'f', v: iter }],
       ])
     })
   })
